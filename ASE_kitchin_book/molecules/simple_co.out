@@ -5,15 +5,15 @@
  |__ |  _|___|_____|  22.8.1b1
  |___|_|             
 
-User:   tha@20175329-p01
-Date:   Thu Jan 26 18:02:07 2023
+User:   tha@Tha-DELL
+Date:   Fri Jan 27 00:11:08 2023
 Arch:   x86_64
-Pid:    7438
-CWD:    /mnt/d/work/w23_DFT/ASE_kitchin_book
+Pid:    6506
+CWD:    /mnt/c/DATA/work/w23_DFT/ASE_kitchin_book
 Python: 3.10.8
 gpaw:   /home/tha/app/miniconda3/envs/py310ase/lib/python3.10/site-packages/gpaw
 _gpaw:  /home/tha/app/miniconda3/envs/py310ase/lib/python3.10/site-packages/
-        _gpaw.cpython-310-x86_64-linux-gnu.so (91fd06ccd7)
+        _gpaw.cpython-310-x86_64-linux-gnu.so
 ase:    /home/tha/app/miniconda3/envs/py310ase/lib/python3.10/site-packages/ase (version 3.23.0b1)
 numpy:  /home/tha/app/miniconda3/envs/py310ase/lib/python3.10/site-packages/numpy (version 1.24.1)
 scipy:  /home/tha/app/miniconda3/envs/py310ase/lib/python3.10/site-packages/scipy (version 1.10.0)
@@ -149,7 +149,7 @@ Hamiltonian:
 XC parameters: PBE with 2 nearest neighbor stencil
 
 Memory estimate:
-  Process memory now: 207.33 MiB
+  Process memory now: 387.11 MiB
   Calculator: 13.39 MiB
     Density: 9.67 MiB
       Arrays: 3.90 MiB
@@ -213,35 +213,35 @@ Effective grid spacing dv^(1/3) = 0.2222
 
      iter     time        total  log10-change:
                          energy  eigst   dens
-iter:   1 18:02:08   -11.208910
-iter:   2 18:02:08   -11.233290  -0.98  -0.93
-iter:   3 18:02:08   -11.108641  -1.23  -0.97
-iter:   4 18:02:08   -11.044305  -1.14  -1.13
-iter:   5 18:02:09   -10.996460  -1.71  -1.60
-iter:   6 18:02:09   -11.000452  -1.97  -1.98
-iter:   7 18:02:09   -11.029232  -1.49  -1.93
-iter:   8 18:02:09   -10.993265  -1.63  -1.67
-iter:   9 18:02:10   -10.993040  -2.83  -2.31
-iter:  10 18:02:10   -10.992522c -3.77  -2.37
-iter:  11 18:02:10   -10.992091c -4.46  -2.48
-iter:  12 18:02:10   -10.992016c -3.44  -2.66
-iter:  13 18:02:10   -10.991926c -5.25  -2.82
-iter:  14 18:02:11   -10.991844c -4.05  -2.91
-iter:  15 18:02:11   -10.991865c -4.28  -3.24
-iter:  16 18:02:11   -10.991838c -5.87  -3.15
-iter:  17 18:02:11   -10.991842c -6.16  -3.30
-iter:  18 18:02:11   -10.991824c -5.07  -3.25
-iter:  19 18:02:12   -10.991825c -6.40  -3.76
-iter:  20 18:02:12   -10.991824c -6.17  -3.74
-iter:  21 18:02:12   -10.991826c -5.99  -3.85
-iter:  22 18:02:12   -10.991824c -6.27  -3.80
-iter:  23 18:02:12   -10.991824c -6.44  -4.18c
-iter:  24 18:02:12   -10.991824c -7.40  -4.16c
-iter:  25 18:02:13   -10.991824c -8.06c -4.29c
+iter:   1 00:11:08   -11.208910
+iter:   2 00:11:08   -11.233290  -0.98  -0.93
+iter:   3 00:11:09   -11.108641  -1.23  -0.97
+iter:   4 00:11:09   -11.044305  -1.14  -1.13
+iter:   5 00:11:09   -10.996460  -1.71  -1.60
+iter:   6 00:11:09   -11.000452  -1.97  -1.98
+iter:   7 00:11:09   -11.029232  -1.49  -1.93
+iter:   8 00:11:09   -10.993265  -1.63  -1.67
+iter:   9 00:11:09   -10.993040  -2.83  -2.31
+iter:  10 00:11:09   -10.992522c -3.77  -2.37
+iter:  11 00:11:09   -10.992091c -4.46  -2.48
+iter:  12 00:11:10   -10.992016c -3.44  -2.66
+iter:  13 00:11:10   -10.991926c -5.25  -2.82
+iter:  14 00:11:10   -10.991844c -4.05  -2.91
+iter:  15 00:11:10   -10.991865c -4.28  -3.24
+iter:  16 00:11:10   -10.991838c -5.87  -3.15
+iter:  17 00:11:10   -10.991842c -6.16  -3.30
+iter:  18 00:11:10   -10.991824c -5.07  -3.25
+iter:  19 00:11:10   -10.991825c -6.40  -3.76
+iter:  20 00:11:10   -10.991824c -6.17  -3.74
+iter:  21 00:11:10   -10.991826c -5.99  -3.85
+iter:  22 00:11:11   -10.991824c -6.27  -3.80
+iter:  23 00:11:11   -10.991824c -6.44  -4.18c
+iter:  24 00:11:11   -10.991824c -7.40  -4.16c
+iter:  25 00:11:11   -10.991824c -8.06c -4.29c
 
 Converged after 25 iterations.
 
-Dipole moment: (-0.514074, 0.000000, 0.000000) |e|*Ang
+Dipole moment: (-0.514074, -0.000000, 0.000000) |e|*Ang
 
 Energy contributions relative to reference atoms: (reference = -3068.480417)
 
