@@ -1,0 +1,38 @@
+### Can run everywhere using cmd
+## Create an identical environment, run:                       conda env create --file environment.yml  (--name myenv)
+## Install/Update packages into an existing environment, run:  conda env update --file environment.yml --prune (--name myenv)
+
+## NOTE
+# GPAW only available for Linux, so use WSL
+
+name: py310ase
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.10
+  - jupyter
+  - numpy
+  - gcc=12
+  - gxx=12
+  - libstdcxx-ng=12
+  - ase
+  - openmpi
+  - blas
+  - libxc
+  - scalapack   # only linux
+
+  ## run: pip install -i requirements.txt
+  # http://www.lfd.uci.edu/~gohlke/pythonlibs/bofhrmxk/opencv_python-3.1.0-cp35-none-win_amd64.whl
+  - pip
+  - pip:
+    - git+https://gitlab.com/ase/ase.git@master
+    - git+https://gitlab.com/gpaw/gpaw.git
+
+
+### Intall by hand in env py39ase
+#  conda install -c conda-forge c-compiler compilers cxx-compiler
+#  conda install -c conda-forge openmpi
+#  pip install git+https://gitlab.com/ase/ase.git@master
+#  pip install gpaw
+
