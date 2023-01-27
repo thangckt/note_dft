@@ -7,7 +7,7 @@
 # `llvm` suite, it contains compiler and linker `clang lld lldb llvm-tools`
 # which corresponding to: gcc, gxx, libstdcxx-ng
 
-name: py310ase
+name: py310gpaw
 channels:
   - conda-forge
   - nodefaults
