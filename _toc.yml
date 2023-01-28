@@ -12,6 +12,7 @@ parts:
       - file: notebook_kitchin/2_1_mol_define_molecule.ipynb
       - file: notebook_kitchin/2_2_mol_simple_properties.ipynb
       - file: notebook_kitchin/2_3_mol_simple_properties_single_run.ipynb
+      - file: notebook_kitchin/2_4_mol_geo_optimization.ipynb
 
   - caption: Bulks
     chapters:
