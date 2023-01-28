@@ -5,7 +5,7 @@ parts:
   - caption: Introduction to DFT
     chapters:
     - file: notebook_kitchin/1_intro_DFT.ipynb
-parts:
+
   - caption: Molecules
     chapters:
       - file: notebook_kitchin/2_1_molecules.ipynb
