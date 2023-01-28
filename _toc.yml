@@ -1,13 +1,10 @@
 format: jb-book
 root: notebook_kitchin/README.md
 
-
 parts:
   - caption: Introduction to DFT
     chapters:
     - file: notebook_kitchin/1_intro_DFT.ipynb
-
-
 parts:
   - caption: Molecules
     chapters:
