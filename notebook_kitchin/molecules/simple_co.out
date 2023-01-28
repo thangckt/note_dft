@@ -587,3 +587,71 @@ Fermi level: -5.94333
 Gap: 6.277 eV
 Transition (v -> c):
   (s=0, k=0, n=4, [0.00, 0.00, 0.00]) -> (s=0, k=0, n=5, [0.00, 0.00, 0.00])
+Timing:                                      incl.     excl.
+-------------------------------------------------------------------
+Density initialized from wave functions:     0.144     0.096   0.0% |
+ Symmetrize density:                         0.048     0.048   0.0% |
+Hamiltonian:                                 0.853     0.007   0.0% |
+ Atomic:                                     0.226     0.003   0.0% |
+  XC Correction:                             0.222     0.222   0.0% |
+ Calculate atomic Hamiltonians:              0.040     0.040   0.0% |
+ Communicate:                                0.000     0.000   0.0% |
+ Initialize Hamiltonian:                     0.000     0.000   0.0% |
+ Poisson:                                    0.007     0.007   0.0% |
+ XC 3D grid:                                 0.574     0.574   0.0% |
+LCAO initialization:                         0.091     0.044   0.0% |
+ LCAO eigensolver:                           0.018     0.000   0.0% |
+  Calculate projections:                     0.000     0.000   0.0% |
+  DenseAtomicCorrection:                     0.000     0.000   0.0% |
+  Distribute overlap matrix:                 0.000     0.000   0.0% |
+  Orbital Layouts:                           0.004     0.004   0.0% |
+  Potential matrix:                          0.013     0.013   0.0% |
+ LCAO to grid:                               0.012     0.012   0.0% |
+ Set positions (LCAO WFS):                   0.016     0.001   0.0% |
+  Basic WFS set positions:                   0.000     0.000   0.0% |
+  Basis functions set positions:             0.000     0.000   0.0% |
+  P tci:                                     0.003     0.003   0.0% |
+  ST tci:                                    0.003     0.003   0.0% |
+  mktci:                                     0.010     0.010   0.0% |
+PWDescriptor:                                0.118     0.118   0.0% |
+Redistribute:                                0.002     0.002   0.0% |
+SCF-cycle:                                  19.278     0.100   0.0% |
+ Davidson:                                   3.418     0.608   0.0% |
+  Apply H:                                   0.610     0.600   0.0% |
+   HMM T:                                    0.011     0.011   0.0% |
+  Subspace diag:                             0.691     0.008   0.0% |
+   calc_h_matrix:                            0.631     0.046   0.0% |
+    Apply H:                                 0.585     0.574   0.0% |
+     HMM T:                                  0.011     0.011   0.0% |
+   diagonalize:                              0.032     0.032   0.0% |
+   rotate_psi:                               0.021     0.021   0.0% |
+  calc. matrices:                            1.370     0.217   0.0% |
+   Apply H:                                  1.153     1.131   0.0% |
+    HMM T:                                   0.022     0.022   0.0% |
+  diagonalize:                               0.106     0.106   0.0% |
+  rotate_psi:                                0.032     0.032   0.0% |
+ Density:                                    2.778     0.002   0.0% |
+  Atomic density matrices:                   0.047     0.047   0.0% |
+  Mix:                                       1.698     1.698   0.0% |
+  Multipole moments:                         0.009     0.009   0.0% |
+  Pseudo density:                            1.023     0.309   0.0% |
+   Symmetrize density:                       0.713     0.713   0.0% |
+ Hamiltonian:                               12.973     0.110   0.0% |
+  Atomic:                                    3.525     0.046   0.0% |
+   XC Correction:                            3.479     3.479   0.0% |
+  Calculate atomic Hamiltonians:             0.581     0.581   0.0% |
+  Communicate:                               0.001     0.001   0.0% |
+  Poisson:                                   0.111     0.111   0.0% |
+  XC 3D grid:                                8.645     8.645   0.1% |
+ Orthonormalize:                             0.010     0.000   0.0% |
+  calc_s_matrix:                             0.002     0.002   0.0% |
+  inverse-cholesky:                          0.002     0.002   0.0% |
+  projections:                               0.004     0.004   0.0% |
+  rotate_psi_s:                              0.001     0.001   0.0% |
+Set symmetry:                                0.004     0.004   0.0% |
+Other:                                    7319.315  7319.315  99.7% |---------------------------------------|
+-------------------------------------------------------------------
+Total:                                              7339.804 100.0%
+
+Memory usage: 769.04 MiB
+Date: Sun Jan 29 01:43:56 2023
