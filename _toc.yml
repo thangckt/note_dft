@@ -9,7 +9,6 @@ root: notebook_kitchin/README.md
 parts:
   - caption: Introduction to DFT
     chapters:
-    - file: notebook_kitchin/README.md
     - file: notebook_kitchin/2_DFT_Overview.ipynb
 
 
