@@ -15,7 +15,3 @@ parts:
       - file: notebook_kitchin/2_3_mol_simple_properties_single_run.ipynb
 
 
-# parts:
-#   - caption: Somes Coding Notes
-#     chapters:
-#       - file: notebook/code_tip/README.md
