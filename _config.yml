@@ -83,15 +83,15 @@ repository:
 #######################################################################################
 # Advanced and power-user settings
 sphinx:
-  config:
-    html_show_copyright: false
-    # mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-    # html_js_files: https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
-    bibtex_reference_style: author_year  # or label, super, \supercite
-    html_theme_options:
-      repository_url: https://github.com/thangckt/note_ml
-      use_download_button: false   # https://github.com/executablebooks/jupyter-book/issues/1186
-      use_edit_page_button: true
-      branch                    : 'main'
+  # config:
+  #   html_show_copyright: false
+  #   # mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  #   # html_js_files: https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
+  #   bibtex_reference_style: author_year  # or label, super, \supercite
+  #   html_theme_options:
+  #     repository_url: https://github.com/thangckt/note_ml
+  #     use_download_button: false   # https://github.com/executablebooks/jupyter-book/issues/1186
+  #     use_edit_page_button: true
+  #     branch                    : 'main'
   # extra_extensions:
     # - sphinx_panels

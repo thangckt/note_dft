@@ -3,6 +3,8 @@
 This repo is for learning DFT calculation
 Main follows guides in [this book](http://kitchingroup.cheme.cmu.edu/dft-book/dft.html)
 
+The note at [https://thangckt.github.io/note_dft](https://thangckt.github.io/note_dft)
+
 ## 2023 Jan 25: Begin with GPAW
 
 ## 2023 Jan 24: Begin with CP2K
