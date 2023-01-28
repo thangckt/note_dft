@@ -9,12 +9,12 @@ root: notebook_kitchin/README.md
 parts:
   - caption: Introduction to DFT
     chapters:
-    - file: notebook_kitchin/2_DFT_Overview.ipynb
+    - file: notebook_kitchin/1_intro_DFT.ipynb
 
 
 
 # parts:
-#   - caption: Data Analysis with Python
+#   - caption: Molecules
 #     chapters:
 #       - file: notebook/data_analysis_python/README.md
 
