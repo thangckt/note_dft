@@ -1,5 +1,5 @@
 format: jb-book
-root: notebook/README.md
+root: notebook_kitchin/README.md
 
 # parts:
 #   - caption: Zero to Mastery Machine Learning
@@ -7,23 +7,11 @@ root: notebook/README.md
 #       - file: notebook/zero_to_mastery_ml/README.md
 
 parts:
-  - caption: PyTorch for Deep Learning
+  - caption: Introduction to DFT
     chapters:
-    - file: notebook/pytorch_deep_learning/README.md
-    - file: notebook/pytorch_deep_learning/SETUP.md
-    - file: notebook/pytorch_deep_learning/00_pytorch_fundamentals.ipynb
-    - file: notebook/pytorch_deep_learning/01_pytorch_workflow.ipynb
-    - file: notebook/pytorch_deep_learning/02_pytorch_classification.ipynb
-    - file: notebook/pytorch_deep_learning/03_pytorch_computer_vision.ipynb
-    - file: notebook/pytorch_deep_learning/04_pytorch_custom_datasets.ipynb
-    - file: notebook/pytorch_deep_learning/05_pytorch_going_modular.md
-    - file: notebook/pytorch_deep_learning/06_pytorch_transfer_learning.ipynb
-    - file: notebook/pytorch_deep_learning/07_pytorch_experiment_tracking.ipynb
-    - file: notebook/pytorch_deep_learning/08_pytorch_paper_replicating.ipynb
-    - file: notebook/pytorch_deep_learning/09_pytorch_model_deployment.ipynb
-    - file: notebook/pytorch_deep_learning/extras/pytorch_extra_resources.md
-    - file: notebook/pytorch_deep_learning/extras/pytorch_cheatsheet.ipynb
-    - file: notebook/pytorch_deep_learning/extras/pytorch_most_common_errors.ipynb
+    - file: notebook_kitchin/README.md
+    - file: notebook_kitchin/2_DFT_Overview.ipynb
+
 
 
 # parts:
