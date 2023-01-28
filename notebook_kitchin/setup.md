@@ -1,4 +1,6 @@
-# Install GPAW
+# Setup
+
+## Install GPAW
 
 just work on Linux, python=3.10
 
@@ -12,12 +14,13 @@ Run in env `py310ase`
 
 ```sh
 gpaw test
-
-gpaw install-data --register ~/PAWDATA
 ```
 
 NOTE:
 - [fix GPAW_SETUP_PATH](https://jensj.gitlab.io/gpaw-2021-talk/slides/slide-09.html)
+  ```sh
+  gpaw install-data --register ~/PAWDATA
+  ```
 - Avoid install from source using `pip`, since it can not link with `scalapack fftw libvdwxc elpa` from conda-forge
   ```sh
   pip install --upgrade git+https://gitlab.com/ase/ase.git@master
