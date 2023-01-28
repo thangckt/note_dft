@@ -15,3 +15,10 @@ parts:
       - file: notebook_kitchin/2_3_mol_simple_properties_single_run.ipynb
 
 
+  - caption: Bulks
+    chapters:
+      - file: notebook_kitchin/3_1_bulk_df.ipynb
+
+  - caption: Surfaces
+    chapters:
+      - file: notebook_kitchin/4_1_surface_df.ipynb
