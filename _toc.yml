@@ -1,10 +1,6 @@
 format: jb-book
 root: notebook_kitchin/README.md
 
-# parts:
-#   - caption: Zero to Mastery Machine Learning
-#     chapters:
-#       - file: notebook/zero_to_mastery_ml/README.md
 
 parts:
   - caption: Introduction to DFT
@@ -12,11 +8,10 @@ parts:
     - file: notebook_kitchin/1_intro_DFT.ipynb
 
 
-
-# parts:
-#   - caption: Molecules
-#     chapters:
-#       - file: notebook/data_analysis_python/README.md
+parts:
+  - caption: Molecules
+    chapters:
+      - file: notebook_kitchin/2_1_molecules.ipynb
 
 # parts:
 #   - caption: Somes Coding Notes
