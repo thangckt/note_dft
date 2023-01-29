@@ -28,3 +28,7 @@ parts:
   - caption: Surfaces
     chapters:
       - file: notebook/4_1_surface_df.ipynb
+
+  - caption: Particles
+    chapters:
+      - file: notebook/5_1_particle_build.ipynb
