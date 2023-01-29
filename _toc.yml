@@ -1,24 +1,30 @@
 format: jb-book
-root: notebook_kitchin/README.md
+root: notebook/README.md
 
 parts:
   - caption: Introduction to DFT
     chapters:
-    - file: notebook_kitchin/1_intro_DFT.ipynb
+    - file: notebook/0_1_dft_intro.ipynb
+
+  - caption: ASE and GPAW
+    chapters:
+    - file: notebook/1_1_ase_setup.md
+    - file: notebook/1_2_ase_workflow.ipynb
+
 
   - caption: Molecules
     chapters:
-      - file: notebook_kitchin/setup.md
-      - file: notebook_kitchin/2_1_mol_define_molecule.ipynb
-      - file: notebook_kitchin/2_2_mol_simple_properties.ipynb
-      - file: notebook_kitchin/2_3_mol_simple_properties_single_run.ipynb
-      - file: notebook_kitchin/2_4_mol_geo_optimization.ipynb
-      - file: notebook_kitchin/2_5_mol_vibration.ipynb
+      - file: notebook/setup.md
+      - file: notebook/2_1_mol_define_molecule.ipynb
+      - file: notebook/2_2_mol_simple_properties.ipynb
+      - file: notebook/2_3_mol_simple_properties_single_run.ipynb
+      - file: notebook/2_4_mol_geo_optimization.ipynb
+      - file: notebook/2_5_mol_vibration.ipynb
 
   - caption: Bulks
     chapters:
-      - file: notebook_kitchin/3_1_bulk_df.ipynb
+      - file: notebook/3_1_bulk_df.ipynb
 
   - caption: Surfaces
     chapters:
-      - file: notebook_kitchin/4_1_surface_df.ipynb
+      - file: notebook/4_1_surface_df.ipynb
