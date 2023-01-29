@@ -6,7 +6,7 @@ parts:
     chapters:
     - file: notebook/0_1_dft_intro.ipynb
 
-  - caption: ASE and GPAW
+  - caption: ASE + GPAW
     chapters:
     - file: notebook/1_1_ase_setup.md
     - file: notebook/1_2_ase_workflow.ipynb
