@@ -21,7 +21,7 @@ Run in env `py310ase`
 gpaw test
 ```
 
-```note
+```{note}
 - [fix GPAW_SETUP_PATH](https://jensj.gitlab.io/gpaw-2021-talk/slides/slide-09.html)
   ```sh
   gpaw install-data --register ~/PAWDATA
@@ -43,7 +43,7 @@ gpaw test
 
 ```
 
-```seealso
+```{seealso}
 1. [Installation ASE](https://wiki.fysik.dtu.dk/ase/install.html)
 2. [Installation GPAW](https://wiki.fysik.dtu.dk/gpaw/install.html)
 ```
