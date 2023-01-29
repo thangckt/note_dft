@@ -39,6 +39,6 @@ gpaw test
 ```
 
 ```{see also}
-1. [Installation ASE](https://wiki.fysik.dtu.dk/ase/install.html)
-2. [Installation GPAW](https://wiki.fysik.dtu.dk/gpaw/install.html)
+  1. [Installation ASE](https://wiki.fysik.dtu.dk/ase/install.html)
+  2. [Installation GPAW](https://wiki.fysik.dtu.dk/gpaw/install.html)
 ```
