@@ -1,6 +1,8 @@
 # Setup
 
-## Install GPAW
+## Install ASE+GPAW
+
+GPAW work interactively with ASE
 
 GPAW only works on Linux environment.
 
