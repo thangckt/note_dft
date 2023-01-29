@@ -22,6 +22,7 @@ gpaw test
 ```
 
 ```{note}
+
 - [fix GPAW_SETUP_PATH](https://jensj.gitlab.io/gpaw-2021-talk/slides/slide-09.html)
     ```sh
     gpaw install-data --register ~/PAWDATA
@@ -36,9 +37,10 @@ gpaw test
     conda install -c conda-forge gcc=12 gxx=12 libstdcxx-ng=12
     conda install -c conda-forge  openmpi openmp blas libxc scalapack fftw libvdwxc elpa
     ```
+
 ```
 
-```{see also}
-  1. [Installation ASE](https://wiki.fysik.dtu.dk/ase/install.html)
-  2. [Installation GPAW](https://wiki.fysik.dtu.dk/gpaw/install.html)
+```{seealso}
+1. [Installation ASE](https://wiki.fysik.dtu.dk/ase/install.html)
+2. [Installation GPAW](https://wiki.fysik.dtu.dk/gpaw/install.html)
 ```
