@@ -32,3 +32,7 @@ parts:
   - caption: Particles
     chapters:
       - file: notebook/5_1_particle_build.ipynb
+
+  - caption: ML
+    chapters:
+      - file: notebook/7_1_ml_design_mat.ipynb
