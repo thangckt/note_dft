@@ -18,4 +18,4 @@
 ## tmp file due to office: ~$_*.doc,  ~$_*.ppt
 **/~*.*
 
-/_static
+_static/*
