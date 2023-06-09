@@ -4,7 +4,8 @@ root: notebook/README.md
 parts:
   - caption: Introduction to DFT
     chapters:
-    - file: notebook/0_1_dft_intro.ipynb
+    - file: notebook/dft_theory/1_dft_introduction.ipynb
+    - file: notebook/dft_theory/2_dft_application_perspective.ipynb
 
   - caption: ASE + GPAW
     chapters:
