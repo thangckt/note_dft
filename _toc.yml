@@ -15,7 +15,7 @@ parts:
 
   - caption: Molecules
     chapters:
-      - file: notebook/setup.md
+#       - file: notebook/setup.md
       - file: notebook/2_1_mol_define_molecule.ipynb
       - file: notebook/2_2_mol_simple_properties.ipynb
       - file: notebook/2_3_mol_simple_properties_single_run.ipynb
