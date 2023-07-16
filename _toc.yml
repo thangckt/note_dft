@@ -11,8 +11,14 @@ parts:
 
   - caption: ASE + GPAW
     chapters:
-    - file: notebook/2_ase/1_1_ase_setup.md
-    - file: notebook/2_ase/1_2_ase_workflow.ipynb
+    - file: notebook/2_ase/1_0_ase_intro.md
+      sections:
+      - file: notebook/2_ase/1_1_ase_workflow.ipynb
+      - file: notebook/2_ase/1_2_ase_setup.md
+
+    - file: notebook/2_ase/2_0_gpaw_intro.md
+      sections:
+      - file: notebook/2_ase/2_1_gpaw_terms.md
 
   - caption: DFT modeling
     chapters:
