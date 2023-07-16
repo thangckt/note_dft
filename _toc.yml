@@ -17,7 +17,7 @@ parts:
   - caption: DFT modeling
     chapters:
       - file: notebook/3_modeling/intro.md
-    chapters:
+
       - file: notebook/3_modeling/2_0_mol_intro.md
         sections:
           - file: notebook/3_modeling/2_1_mol_define_molecule.ipynb
@@ -26,15 +26,12 @@ parts:
           - file: notebook/3_modeling/2_4_mol_geo_optimization.ipynb
           - file: notebook/3_modeling/2_5_mol_vibration.ipynb
 
-    chapters:
       - file: notebook/3_modeling/3_1_bulk_intro.md
         sections:
           - file: notebook/3_modeling/3_1_bulk_df.ipynb
 
-    chapters:
       - file: notebook/3_modeling/4_1_surface_df.ipynb
 
-    chapters:
       - file: notebook/3_modeling/5_1_particle_build.ipynb
 
   - caption: ML
