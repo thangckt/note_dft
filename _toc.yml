@@ -1,3 +1,5 @@
+# Learn more at https://jupyterbook.org/customize/toc.html
+#
 format: jb-book
 root: notebook/README.md
 
