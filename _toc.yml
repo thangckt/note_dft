@@ -4,33 +4,32 @@ root: notebook/README.md
 parts:
   - caption: Introduction to DFT
     chapters:
-    - file: notebook/dft_theory/1_dft_introduction.ipynb
-    - file: notebook/dft_theory/2_dft_application_perspective.ipynb
+    - file: notebook/1_dft_theory/1_dft_introduction.ipynb
+    - file: notebook/1_dft_theory/2_dft_application_perspective.ipynb
 
   - caption: ASE + GPAW
     chapters:
-    - file: notebook/1_1_ase_setup.md
-    - file: notebook/1_2_ase_workflow.ipynb
+    - file: notebook/2_ase/1_1_ase_setup.md
+    - file: notebook/2_ase/1_2_ase_workflow.ipynb
 
-
-  - caption: Molecules
+  - caption: DFT modeling
     chapters:
-#       - file: notebook/setup.md
-      - file: notebook/2_1_mol_define_molecule.ipynb
-      - file: notebook/2_2_mol_simple_properties.ipynb
-      - file: notebook/2_3_mol_simple_properties_single_run.ipynb
-      - file: notebook/2_4_mol_geo_optimization.ipynb
-      - file: notebook/2_5_mol_vibration.ipynb
+      - file: notebook/intro.md
+    chapters:
+      - file: notebook/2_ase/2_0_mol_intro.md
+      sections: Molecules
+        - file: notebook/2_1_mol_define_molecule.ipynb
+        - file: notebook/2_2_mol_simple_properties.ipynb
+        - file: notebook/2_3_mol_simple_properties_single_run.ipynb
+        - file: notebook/2_4_mol_geo_optimization.ipynb
+        - file: notebook/2_5_mol_vibration.ipynb
 
-  - caption: Bulks
     chapters:
       - file: notebook/3_1_bulk_df.ipynb
 
-  - caption: Surfaces
     chapters:
       - file: notebook/4_1_surface_df.ipynb
 
-  - caption: Particles
     chapters:
       - file: notebook/5_1_particle_build.ipynb
 
