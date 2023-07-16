@@ -16,7 +16,7 @@ parts:
 
   - caption: DFT modeling
     chapters:
-      - file: notebook/intro.md
+      - file: notebook/3_modeling/intro.md
     chapters:
       - file: notebook/3_modeling/2_0_mol_intro.md
         sections:
