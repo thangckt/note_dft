@@ -19,7 +19,7 @@ parts:
       - file: notebook/intro.md
     chapters:
       - file: notebook/2_ase/2_0_mol_intro.md
-      sections: Molecules
+      sections:
         - file: notebook/2_1_mol_define_molecule.ipynb
         - file: notebook/2_2_mol_simple_properties.ipynb
         - file: notebook/2_3_mol_simple_properties_single_run.ipynb
