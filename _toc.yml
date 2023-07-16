@@ -39,4 +39,4 @@ parts:
 
   - caption: ML
     chapters:
-      - file: notebook/7_1_ml_design_mat.ipynb
+      - file: notebook/4_ml/7_1_ml_design_mat.ipynb
