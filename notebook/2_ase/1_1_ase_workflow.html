@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>ASE workflow &#8212; Modeling materials using density functional theory</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/2_ase/1_1_ase_workflow';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="2_0_gpaw_intro.html" />
+    <link rel="prev" title="ASE" href="1_0_ase_intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Modeling materials using density functional theory</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to DFT</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/1_dft_introduction.html">Density Functional Theory (DFT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/2_dft_application_perspective.html">Application perspective of DFT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ASE + GPAW</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="0_ase_setup.html">Setup</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="1_0_ase_intro.html">ASE</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">ASE workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_1_gpaw_terms.html">GPAW basic usage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">DFT modeling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_modeling/2_0_mol_intro.html">Molecule</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_1_mol_define_molecule.html">Building and Visualizing molecules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_2_mol_simple_properties.html">Simple properties with ASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_3_mol_simple_properties_single_run.html">Simple properties with single calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_4_mol_geo_optimization.html">Geometry optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_5_mol_vibration.html">Vibrational frequencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_modeling/3_0_bulk_intro.html">Bulk</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../3_modeling/5_1_particle_build.html">Build nanoparticles</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ML</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../4_ml/7_1_ml_design_mat.html">Design material with ML</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/thangckt/note_dft/edit/main/notebook/2_ase/1_1_ase_workflow.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ASE workflow</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-workflow">Basic workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-things">Define things</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-atoms-object">The Atoms object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculators">Calculators</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-outputs-for-post-processing">Write outputs for post processing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize">Visualize</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p><a href="https://colab.research.google.com/github/thangckt/note_dft/blob/main/notebook/2_ase/1_1_ase_workflow.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="ase-workflow">
+<h1>ASE workflow<a class="headerlink" href="#ase-workflow" title="Permalink to this heading">#</a></h1>
+<section id="basic-workflow">
+<h2>Basic workflow<a class="headerlink" href="#basic-workflow" title="Permalink to this heading">#</a></h2>
+<p>ASE allows atomistic calculations to be scripted with different computational codes. To perform a calculation in ASE, we have to</p>
+<ul class="simple">
+<li><p>Define an <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> object, which contains atomic positions and simulation cell (atom, molecule, bulk)</p></li>
+<li><p>Define a calculator and attach it to <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> object.</p></li>
+<li><p>The calculation is triggered when methods of <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> is called. E.g., <code class="docutils literal notranslate"><span class="pre">atoms.get_forces()</span></code>,…</p></li>
+</ul>
+<p>The parameters for calculation are set in <strong>calculator</strong>. Each calculator has its parameters.</p>
+<p><img alt="" src="https://github.com/thangckt/note_dft/blob/main/notebook/images/1_1_ase_and_gpaw.png?raw=1" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">from</span> <span class="nn">ase.calculators.emt</span> <span class="kn">import</span> <span class="n">EMT</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># define Atoms object</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">EMT</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>     <span class="c1"># define calculator</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>   <span class="c1"># attach calculator to atoms obj</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>   <span class="c1"># strigger calculation</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-things">
+<h2>Define things<a class="headerlink" href="#define-things" title="Permalink to this heading">#</a></h2>
+<p>All modules in ASE are available <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/ase.html">here</a></p>
+<section id="the-atoms-object">
+<h3>The Atoms object<a class="headerlink" href="#the-atoms-object" title="Permalink to this heading">#</a></h3>
+<p>The Atoms object is the main simulation object. It contains:
+• Per-atom data: positions, velocities, charges, magnetic moments, tags.
+• Global data: Unit cell, boundary conditions.
+• Refs to helper objects: Calculator, constraints,…</p>
+<p>See <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/_downloads/e5bc3d24100d74180bcee8b22af1f2e3/Intro_projects_CAMD2022.pdf">Introduction</a></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Atoms</span></code> object can be created in several ways</p>
+<ul class="simple">
+<li><p>Build from scratch with <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/atoms.html#"><code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code></a></p></li>
+<li><p>Use predefined object in <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/build/build.html#module-ase.build"><code class="docutils literal notranslate"><span class="pre">ase.build</span></code></a>: <code class="docutils literal notranslate"><span class="pre">molecule</span></code>, <code class="docutils literal notranslate"><span class="pre">bulk</span></code>, <code class="docutils literal notranslate"><span class="pre">surface</span></code>,…</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ase.lattice</span></code> module. The module contains functions for creating most common crystal structures with arbitrary orientation. The user can specify the desired Miller index along the three axes of the simulation, and the smallest periodic structure fulfilling this specification is created. Both bulk crystals and surfaces can be created.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ase.cluster</span></code> module. Useful for creating nanoparticles and clusters.</p></li>
+<li><p>Read from data files, in other formats with <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/io/io"><code class="docutils literal notranslate"><span class="pre">ase.io</span></code></a>: <code class="docutils literal notranslate"><span class="pre">*.cig</span></code>, … that can get from open database, such as <a class="reference external" href="http://www.crystallography.net/cod/">Crystallography Open Database</a>, <a class="reference external" href="https://materialsproject.org/">Material Project</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The XYZ format does not have unit cell information in it, so you will have to figure out a way to provide it.
+<code class="docutils literal notranslate"><span class="pre">atoms.center(vacuum=5)</span></code> in <code class="docutils literal notranslate"><span class="pre">ase</span></code> is a qick for that</p>
+</div>
+</section>
+<section id="calculators">
+<h3>Calculators<a class="headerlink" href="#calculators" title="Permalink to this heading">#</a></h3>
+<p>For ASE, a calculator is a black box that can take atomic numbers and atomic positions from an Atoms object and calculate the energy and forces and sometimes also stresses.</p>
+<p>All <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/calculators/calculators">supported calculators</a> can be divided into four groups:</p>
+<ol class="arabic simple">
+<li><p>Have their own ative or external ASE interfaces: GPAW, BigDFT, DeePMD-kit,…</p></li>
+<li><p>Have Python wrappers in the ASE, but the actual FORTRAN/C/C++ codes are not part of ASE: LAMMPS, VASP, PLUMED…</p></li>
+<li><p>Pure python implementations included in the ASE package: EMT, EAM, Lennard-Jones, Morse and HarmonicCalculator.</p></li>
+<li><p>Calculators that wrap others</p></li>
+</ol>
+</section>
+</section>
+<section id="write-outputs-for-post-processing">
+<h2>Write outputs for post processing<a class="headerlink" href="#write-outputs-for-post-processing" title="Permalink to this heading">#</a></h2>
+<p>See the <code class="docutils literal notranslate"><span class="pre">ase.io</span></code> <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/io/io.html#">module</a></p>
+<p>When running multiple calculations, we often want to write them into a file. We can use the standard trajectory format to write multiple calculations (atoms and energy) like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.io.trajectory</span> <span class="kn">import</span> <span class="n">Trajectory</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">(</span><span class="s1">&#39;mytrajectory.traj&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+<span class="c1">## Run series of can calculations</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="n">traj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualize">
+<h2>Visualize<a class="headerlink" href="#visualize" title="Permalink to this heading">#</a></h2>
+<p>For visualization</p>
+<ul>
+<li><p>ASE provide a <a class="reference external" href="https://wiki.fysik.dtu.dk/ase//ase/visualize/visualize.html">Visualize module</a>. Consider to install packages <code class="docutils literal notranslate"><span class="pre">nglview</span></code> may require to visualize in jupyter.</p></li>
+<li><p>See <a class="reference external" href="https://osscar-docs.readthedocs.io/en/latest/visualizer/nglview_advanced.html">Nglview advance usage</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">nglview</span>
+<span class="o">%</span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">arose</span><span class="o">/</span><span class="n">nglview</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>More advanced visualize with nglview <a class="reference external" href="https://docs.matlantis.com/atomistic-simulation-tutorial/ja/Appendix_1_visualization.html">see here</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">Atom</span>
+<span class="kn">from</span> <span class="nn">ase.visualize</span> <span class="kn">import</span> <span class="n">view</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">([</span><span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span>
+                <span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])],</span>
+                <span class="n">cell</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+
+<span class="c1"># visualize</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># to view box</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "50f671686d2a49ebb38e6ee9c1cb9159", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook/2_ase"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="1_0_ase_intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ASE</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2_0_gpaw_intro.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-workflow">Basic workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-things">Define things</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-atoms-object">The Atoms object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculators">Calculators</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-outputs-for-post-processing">Write outputs for post processing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize">Visualize</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By thangckt
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

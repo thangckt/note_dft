@@ -1,0 +1,1850 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Design material with ML &#8212; Modeling materials using density functional theory</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/4_ml/7_1_ml_design_mat';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Build nanoparticles" href="../3_modeling/5_1_particle_build.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Modeling materials using density functional theory</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to DFT</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/1_dft_introduction.html">Density Functional Theory (DFT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/2_dft_application_perspective.html">Application perspective of DFT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ASE + GPAW</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/0_ase_setup.html">Setup</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_ase/1_0_ase_intro.html">ASE</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_ase/1_1_ase_workflow.html">ASE workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/2_1_gpaw_terms.html">GPAW basic usage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">DFT modeling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_modeling/2_0_mol_intro.html">Molecule</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_1_mol_define_molecule.html">Building and Visualizing molecules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_2_mol_simple_properties.html">Simple properties with ASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_3_mol_simple_properties_single_run.html">Simple properties with single calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_4_mol_geo_optimization.html">Geometry optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3_modeling/2_5_mol_vibration.html">Vibrational frequencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../3_modeling/3_0_bulk_intro.html">Bulk</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../3_modeling/5_1_particle_build.html">Build nanoparticles</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ML</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Design material with ML</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/thangckt/note_dft/edit/main/notebook/4_ml/7_1_ml_design_mat.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Design material with ML</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-inspection-of-database">Part 1: Inspection of database</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-machine-learning">Part 2: Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-vectors">Input Vectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling">Modelling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-the-heat-of-formation">Modelling the heat of formation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-the-input-vector">Improving the input vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-the-models">Improving the models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-testing-and-evaluating-the-model">Part 3: Testing and evaluating the model</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p>Calculation in this section follow the <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/summerschools/summerschool22/summerschool22.html">GPAW summer school 2022</a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="design-material-with-ml">
+<h1>Design material with ML<a class="headerlink" href="#design-material-with-ml" title="Permalink to this heading">#</a></h1>
+<p>In this exercise, you will experience a few machine learning methods for design of new materials starting from an existing database. In particular, you will design a model to identify good candidate materials for light harvesting, based on a small database of organic/inorganic perovskites. Afterwards, you will validate the model predictions by running DFT calculations on selected systems.</p>
+<p>You will learn how to work with ASE databases, and do some simple machine learning for electronic structure properties. The driving idea is to predict complex properties of compounds from simpler properties, under the slogan that <em>the fastest calculation is the one you don’t have to run</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="n">dir_nb</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">globals</span><span class="p">()[</span><span class="s1">&#39;_dh&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">ase.db</span> <span class="kn">import</span> <span class="n">connect</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dir_nb</span><span class="o">/</span><span class="s1">&#39;ml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="part-1-inspection-of-database">
+<h2>Part 1: Inspection of database<a class="headerlink" href="#part-1-inspection-of-database" title="Permalink to this heading">#</a></h2>
+<p>The first part of the exercise is an inspection of the existing database. Understanding what is available from other sources is a necessary step before running any machine learning tools. Here, you will:</p>
+<ul class="simple">
+<li><p>Extract structures from the database.</p></li>
+<li><p>Calculate heat of formations.</p></li>
+<li><p>Plot histograms and scatter plots for different quantities available from the database.</p></li>
+</ul>
+<p>In the current directory, there is an <code class="docutils literal notranslate"><span class="pre">ase</span></code> database file called <code class="docutils literal notranslate"><span class="pre">organometal.db</span></code> (more info on the <code class="docutils literal notranslate"><span class="pre">ase.db</span></code> module can be found <a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/db/db.html#module-ase.db">here</a>). It contains information about organometallic perovskites, and the goal is to predict properties for these. Along with the perovskite compounds, there are also reference calculations of the elements in their standard states. We start by connecting to the database, and inspecting a single row:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">db</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;organometal.db&#39;</span><span class="p">)</span>
+<span class="n">row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;organometal&#39;</span><span class="p">))</span>
+<span class="nb">vars</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;_constraints&#39;: [],
+ &#39;_constrained_forces&#39;: None,
+ &#39;_data&#39;: b&#39;\x08\x00\x00\x00\x00\x00\x00\x00{}&#39;,
+ &#39;_keys&#39;: [&#39;gllbsc_disc&#39;,
+  &#39;project&#39;,
+  &#39;name&#39;,
+  &#39;symmetry&#39;,
+  &#39;gllbsc_ind_gap&#39;,
+  &#39;space_group&#39;,
+  &#39;gllbsc_dir_gap&#39;],
+ &#39;gllbsc_disc&#39;: 1.07954239655,
+ &#39;project&#39;: &#39;organometal&#39;,
+ &#39;name&#39;: &#39;FASnBrCl2&#39;,
+ &#39;symmetry&#39;: &#39;tetragonal&#39;,
+ &#39;gllbsc_ind_gap&#39;: 3.35501732137,
+ &#39;space_group&#39;: &#39;P4/mbm&#39;,
+ &#39;gllbsc_dir_gap&#39;: 3.36281311978,
+ &#39;id&#39;: 1,
+ &#39;unique_id&#39;: &#39;2f2c630359fb15fa051e64705384892e&#39;,
+ &#39;ctime&#39;: 14.594562716184596,
+ &#39;mtime&#39;: 23.080794048895424,
+ &#39;user&#39;: &#39;ivca&#39;,
+ &#39;numbers&#39;: array([17, 17, 17, 17, 17, 17, 17, 17, 35, 35, 35, 35, 50, 50, 50, 50,  6,
+         1,  1,  1,  1,  1,  7,  7,  6,  1,  1,  1,  1,  1,  7,  7,  6,  1,
+         1,  1,  1,  1,  7,  7,  6,  1,  1,  1,  1,  1,  7,  7],
+       dtype=int32),
+ &#39;positions&#39;: array([[  2.75190893,  -2.26174457,  -0.02450059],
+        [  2.19053072,  -1.34151356,  -5.9773534 ],
+        [  1.95759498,  -6.18456592,  -6.40469719],
+        [  2.05700152,  -6.08339509,  -0.37873571],
+        [  6.26726515,  -1.84898723,  -6.44441533],
+        [  6.37447639,  -1.76985271,  -0.37388735],
+        [  7.06988229,  -6.55815124,   0.02615888],
+        [  6.47845542,  -5.63240419,  -6.00758134],
+        [  0.44315077,   0.39288054,  -2.93849406],
+        [  4.84358173,  -4.07984207,  -9.02700515],
+        [  0.53435046,   0.22600605,  -8.9943495 ],
+        [  4.77294051,  -3.89559719,  -2.96244795],
+        [  0.40724635,   0.52331406,  -0.20118809],
+        [  4.66520838,  -3.89969757,  -6.29901184],
+        [  0.37660293,   0.38712016,  -6.26478005],
+        [  4.72777206,  -3.80906471,  -0.22900893],
+        [  0.53880847,  -3.48427124,  -2.8901694 ],
+        [  0.37613094,  -2.54590686,  -3.37140721],
+        [  1.99776075,  -4.083922  ,  -4.14569845],
+        [ -0.88175033,  -3.15396856,  -1.50164513],
+        [  1.63994934,  -5.22662282,  -2.93221368],
+        [ -0.08627302,  -4.67832829,  -1.36227077],
+        [  1.4223533 ,  -4.36366007,  -3.39073791],
+        [ -0.20085975,  -3.80448079,  -1.8357763 ],
+        [  4.85659081,   0.83351109,  -8.93198011],
+        [  4.69391327,   1.77187548,  -9.41321792],
+        [  6.31554308,   0.23386033, -10.18750916],
+        [  3.43603201,   1.16381377,  -7.54345583],
+        [  5.95773167,  -0.90884049,  -8.97402438],
+        [  4.23150931,  -0.36054596,  -7.40408147],
+        [  5.74013563,  -0.04587774,  -9.43254862],
+        [  4.11692258,   0.51330155,  -7.877587  ],
+        [  0.53880847,  -3.48427124,  -8.93198011],
+        [  0.37613094,  -2.54590686,  -9.41321792],
+        [  1.99776075,  -4.083922  , -10.18750916],
+        [ -0.88175033,  -3.15396856,  -7.54345583],
+        [  1.63994934,  -5.22662282,  -8.97402438],
+        [ -0.08627302,  -4.67832829,  -7.40408147],
+        [  1.4223533 ,  -4.36366007,  -9.43254862],
+        [ -0.20085975,  -3.80448079,  -7.877587  ],
+        [  4.85659081,   0.83351109,  -2.8901694 ],
+        [  4.69391327,   1.77187548,  -3.37140721],
+        [  6.31554308,   0.23386033,  -4.14569845],
+        [  3.43603201,   1.16381377,  -1.50164513],
+        [  5.95773167,  -0.90884049,  -2.93221368],
+        [  4.23150931,  -0.36054596,  -1.36227077],
+        [  5.74013563,  -0.04587774,  -3.39073791],
+        [  4.11692258,   0.51330155,  -1.8357763 ]]),
+ &#39;cell&#39;: array([[ 8.63556467,  0.        ,  0.        ],
+        [ 0.        ,  8.63556467,  0.        ],
+        [ 0.        ,  0.        , 12.08652101]]),
+ &#39;pbc&#39;: array([ True,  True,  True]),
+ &#39;initial_magmoms&#39;: array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]),
+ &#39;calculator&#39;: &#39;gpaw&#39;,
+ &#39;calculator_parameters&#39;: {&#39;xc&#39;: &#39;GGA_X_PBE_SOL+GGA_C_PBE_SOL&#39;},
+ &#39;energy&#39;: -241.7413298942581}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Each row of the database has some key-value pairs, which are stored explicitly, as well as some basic information which is always stored, recording how the data was calculated. Can you identify what each of the keys below refers to?</p>
+<p>calculator:
+calculator_parameters:
+cell:
+ctime:
+energy:
+gllbsc_dir_gap:
+gllbsc_disc:
+gllbsc_ind_gap:
+id:
+initial_magmoms:
+mtime:
+name:
+numbers:
+pbc:
+positions:
+project:
+space_group:
+symmetry:
+unique_id:
+user:</p>
+<p>Each row also has a <code class="docutils literal notranslate"><span class="pre">toatoms()</span></code> method, which lets us extract an <code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code> object from the row.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.visualize</span> <span class="kn">import</span> <span class="n">view</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">toatoms</span><span class="p">()</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span><span class="o">=</span><span class="kc">True</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;x3d&#39;</span><span class="p">)</span>      <span class="c1"># &#39;ngl&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><html>
+
+ <head>
+
+  <title>ASE atomic visualization</title>
+
+  <link rel="stylesheet" type="text/css"
+
+   href="https://www.x3dom.org/x3dom/release/x3dom.css">
+
+  </link>
+
+  <script type="text/javascript"
+
+   src="https://www.x3dom.org/x3dom/release/x3dom.js">
+
+  </script>
+
+ </head>
+
+ <body>
+
+  <X3D>
+
+   <Scene>
+
+    <Transform translation="0.34 -4.05 -2.61">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="7.30 -4.01 -8.12">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="4.17 -7.89 -8.12">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="3.47 -0.17 -2.62">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="6.06 -1.73 -0.12">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="6.05 -1.77 -5.11">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="1.56 -6.31 -10.63">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="1.60 -6.31 -5.63">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="2.25 -2.42 -10.60">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="2.24 -2.41 -5.66">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="5.37 -5.63 -0.14">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="5.40 -5.67 -5.09">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.122 0.941 0.122" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.02">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="7.53 -7.57 -2.63">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.341 0.090 0.561" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="2.44">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="0.11 -0.49 -8.12">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.341 0.090 0.561" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="2.44">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="3.77 -4.36 -8.12">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.341 0.090 0.561" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="2.44">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="3.86 -3.70 -2.63">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.341 0.090 0.561" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="2.44">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="3.81 -0.13 0.14">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.400 0.502 0.502" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.39">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="3.82 -0.14 -5.37">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.400 0.502 0.502" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.39">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="0.00 -4.04 0.14">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.400 0.502 0.502" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.39">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+    <Transform translation="0.01 -4.04 -5.37">
+
+     <Shape>
+
+      <Appearance>
+
+       <Material diffuseColor="0.400 0.502 0.502" specularColor="0.5 0.5 0.5">
+
+       </Material>
+
+      </Appearance>
+
+      <Sphere radius="1.39">
+
+      </Sphere>
+
+     </Shape>
+
+    </Transform>
+
+   </Scene>
+
+  </X3D>
+
+ </body>
+
+</html>
+
+</div></div>
+</div>
+<p>When doing any kind of data analysis, the first step is always to become familiar with the data in question, on a basic level. The <code class="docutils literal notranslate"><span class="pre">select()</span></code> method of the database applies a query to the database and returns an iterator of all the rows matching that query. To select all rows with a user of <code class="docutils literal notranslate"><span class="pre">einstein</span></code>, we would type <code class="docutils literal notranslate"><span class="pre">db.select(user='einstein')</span></code>. To select all rows with a <code class="docutils literal notranslate"><span class="pre">gllbsc</span> <span class="pre">direct</span> <span class="pre">gap</span></code> greater than 0.5 eV, we would type <code class="docutils literal notranslate"><span class="pre">db.select('gllbsc_dir_gap&gt;0.5')</span></code>. Counting the number of hits can be be done using <code class="docutils literal notranslate"><span class="pre">db.count(key=value)</span></code> for some key-value pair.</p>
+<p>How many rows are there in the database?</p>
+<p>How many belong to the <code class="docutils literal notranslate"><span class="pre">organometal</span></code> <em>project</em>?</p>
+<p>And how many to the <code class="docutils literal notranslate"><span class="pre">references</span></code> <em>subproject</em>?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;organometal&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">subproject</span><span class="o">=</span><span class="s1">&#39;references&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>157
+149
+8
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">organometal_rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;organometal&#39;</span><span class="p">)]</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">organometal_rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>149
+</pre></div>
+</div>
+</div>
+</div>
+<p>The structures in the database were generated from the general formula ABX,
+and then varying A, B and X. X represents a combination of 3 halogen atoms,
+chosen from [“Cl”, “Br”, “I”]. The A, B and X is encoded in value for the key
+<code class="docutils literal notranslate"><span class="pre">name</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">row.name</span> <span class="pre">-&gt;</span> <span class="pre">'CsPbI3'</span></code>. We have also distorted some of the
+structures, giving four different symmetry types for each atomic composition.</p>
+<ol class="arabic simple">
+<li><p>Try to identity the possible values of A and B.
+(Hint: A and B is labeled with two characters <code class="docutils literal notranslate"><span class="pre">row.name</span></code>,
+i.e <code class="docutils literal notranslate"><span class="pre">A='Cs'</span></code> and <code class="docutils literal notranslate"><span class="pre">B='Pb'</span></code> in <code class="docutils literal notranslate"><span class="pre">'CsPbI3'</span></code>)</p></li>
+<li><p>Can you identify the four different symmetry classes?</p></li>
+<li><p>By making all possible combinations of both A, B, X, and symmetries, how
+many structures could be generated in total? And how many unique are there,
+i.e. without considering the different symmetries?</p></li>
+</ol>
+<p>As you can see from the exercise above, two organic molecules (methylammonium MA, formula <span class="math notranslate nohighlight">\(CH_6N\)</span> and formamidinium FA, formula <span class="math notranslate nohighlight">\(CH_5N_2\)</span>) can be used instead of Cs as cations in the inorganic perovskite template. View the structure of MA and FA from the reference subproject in the database.</p>
+<p>Two good ideas are to plot distributions of interesting quantities, and to calculate some summary statistics of numeric quantities, such as the mean and the variance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">organometal_rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;organometal&#39;</span><span class="p">)]</span>
+<span class="n">discs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">gllbsc_disc</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">organometal_rows</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean of `gllbsc_disc` = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discs</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variance of `gllbsc_disc` = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">discs</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">discs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Energy (eV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean of `gllbsc_disc` = 0.9080
+Variance of `gllbsc_disc` = 0.1132
+</pre></div>
+</div>
+<img alt="../../_images/7722175321e64f1bd4c9004b57a8a880de023eae4ab3dd20c818c7095369d08e.png" src="../../_images/7722175321e64f1bd4c9004b57a8a880de023eae4ab3dd20c818c7095369d08e.png" />
+</div>
+</div>
+<p>Make a histogram for each of the numeric quantities in the database, and calculate the mean and variance of these quantities. You can also make scatter plots of one quantitity against another by using the <code class="docutils literal notranslate"><span class="pre">scatter</span></code> method of pyplot, <code class="docutils literal notranslate"><span class="pre">plt.scatter()</span></code>. How do these distributions vary with the <code class="docutils literal notranslate"><span class="pre">symmetry</span></code> keyword of the database?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numeric_quantities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="s2">&quot;gllbsc_disc&quot;</span><span class="p">,</span> <span class="s2">&quot;gllbsc_dir_gap&quot;</span><span class="p">,</span> <span class="s2">&quot;gllbsc_ind_gap&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## convert to pandas for convenient access</span>
+<span class="n">organometal_rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;organometal&#39;</span><span class="p">)]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">organometal_rows</span><span class="p">],</span>
+                <span class="s1">&#39;energy&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">gllbsc_disc</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">organometal_rows</span><span class="p">],</span>
+                <span class="s1">&#39;gllbsc_disc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">gllbsc_disc</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">organometal_rows</span><span class="p">],</span>
+                <span class="s1">&#39;gllbsc_dir_gap&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">gllbsc_dir_gap</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">organometal_rows</span><span class="p">],</span>
+                <span class="s1">&#39;gllbsc_ind_gap&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">gllbsc_ind_gap</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">organometal_rows</span><span class="p">],}</span> <span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>energy</th>
+      <th>gllbsc_disc</th>
+      <th>gllbsc_dir_gap</th>
+      <th>gllbsc_ind_gap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>FASnBrCl2</td>
+      <td>1.079542</td>
+      <td>1.079542</td>
+      <td>3.362813</td>
+      <td>3.355017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>CsPbI2Cl</td>
+      <td>1.358794</td>
+      <td>1.358794</td>
+      <td>3.398466</td>
+      <td>3.385951</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>MASnBr3</td>
+      <td>0.406623</td>
+      <td>0.406623</td>
+      <td>1.100416</td>
+      <td>1.100416</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>MASnBr3</td>
+      <td>1.281106</td>
+      <td>1.281106</td>
+      <td>3.864523</td>
+      <td>3.746244</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>FAPbI2Cl</td>
+      <td>0.859126</td>
+      <td>0.859126</td>
+      <td>1.790605</td>
+      <td>1.790605</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>FAPbI3</td>
+      <td>1.044387</td>
+      <td>1.044387</td>
+      <td>2.792533</td>
+      <td>2.406725</td>
+    </tr>
+    <tr>
+      <th>145</th>
+      <td>FAPbI3</td>
+      <td>0.770664</td>
+      <td>0.770664</td>
+      <td>1.474120</td>
+      <td>1.474120</td>
+    </tr>
+    <tr>
+      <th>146</th>
+      <td>FAPbI3</td>
+      <td>0.697389</td>
+      <td>0.697389</td>
+      <td>0.702914</td>
+      <td>0.702914</td>
+    </tr>
+    <tr>
+      <th>147</th>
+      <td>FAPbI3</td>
+      <td>0.703883</td>
+      <td>0.703883</td>
+      <td>1.309252</td>
+      <td>1.282819</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>CsSnCl3</td>
+      <td>0.492207</td>
+      <td>0.492207</td>
+      <td>1.455580</td>
+      <td>1.455580</td>
+    </tr>
+  </tbody>
+</table>
+<p>149 rows × 5 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## plot feature correlation</span>
+<span class="n">df2</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;energy&#39;</span><span class="p">:]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>  <span class="c1"># so we don&#39;t have to slice by row and column</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">col1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">col2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">j</span><span class="o">&gt;</span><span class="n">i</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="n">col1</span><span class="p">],</span> <span class="n">df2</span><span class="p">[</span><span class="n">col2</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">col1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">col2</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/9e55d37c21d8f1493e618fcfabdd7f18df749c67b23fd511da4e2d797d12e218.png" src="../../_images/9e55d37c21d8f1493e618fcfabdd7f18df749c67b23fd511da4e2d797d12e218.png" />
+</div>
+</div>
+<p>The energy contained in each row is an energy with respect to some arbitrary reference, which was set in the original calculation. A more sensible reference is provided by the materials with <code class="docutils literal notranslate"><span class="pre">subproject</span> <span class="pre">==</span> <span class="pre">'references'</span></code>. We can calculate the heat of formation per unit cell of the ‘MAPbI3’ compound as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;MAPbI3&#39;</span><span class="p">,</span> <span class="n">symmetry</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
+<span class="n">en_cubic</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">energy</span>
+<span class="n">en_refs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">subproject</span><span class="o">=</span><span class="s1">&#39;references&#39;</span><span class="p">):</span>
+    <span class="n">en_refs</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">element</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">energy</span> <span class="o">/</span> <span class="n">row</span><span class="o">.</span><span class="n">natoms</span>
+
+<span class="n">E_standard</span> <span class="o">=</span> <span class="n">en_cubic</span> <span class="o">-</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">en_refs</span><span class="p">[</span><span class="s1">&#39;MA&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">en_refs</span><span class="p">[</span><span class="s1">&#39;Pb&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">en_refs</span><span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;hof = </span><span class="si">{</span><span class="n">E_standard</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row</span><span class="o">.</span><span class="n">natoms</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1"> eV/atom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hof = -0.668 eV/atom
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on this, can you calculate the difference in heat of formation per formula unit of <span class="math notranslate nohighlight">\(MAPbI_3\)</span> in the tetragonal phase versus the cubic phase? What about the heat of formation of <span class="math notranslate nohighlight">\(FASnBr_2Cl\)</span> in the orthorhombic_1 phase versus the cubic phase of the <span class="math notranslate nohighlight">\(FASnBr_3\)</span>, and of <span class="math notranslate nohighlight">\(FASnCl_3\)</span>. (hint: tetragonal and orthorhombic phases have a unit cell larger than the cubic structure).</p>
+</section>
+<section id="part-2-machine-learning">
+<h2>Part 2: Machine Learning<a class="headerlink" href="#part-2-machine-learning" title="Permalink to this heading">#</a></h2>
+<p>Machine Learning is the science of getting computers to learn and act like humans do, and improve their learning over time in autonomous fashion, by feeding them data and information in the form of observations and real-world interactions. The crucial idea is that the computer should be able to improve its performance at a given task as we give it more information. A tutorial on machine learning in general can be found <a class="reference external" href="http://scikit-learn.org/stable/tutorial/basic/tutorial.html">here</a>.</p>
+<p>In this workbook we will be carrying  out a supervised learning task, where we attempt to <strong>predict a particular (known) attribute</strong> of a given structure, <strong>based on other attributes</strong> of the structure. This can be useful if it allows us to use easy-to-calculate properties to say something about quantities which are difficult to calculate. This approach to learning, where we attempt to find <em>a map <span class="math notranslate nohighlight">\(f\)</span></em> from the <em>attributes, <span class="math notranslate nohighlight">\(X\)</span>,</em> of our data to <em>some target property, <span class="math notranslate nohighlight">\(y\)</span>,</em> is known as <strong>supervised learning</strong>. See <a class="reference external" href="https://en.wikipedia.org/wiki/Supervised_learning">here</a> for more general information on the topic.</p>
+<p>The two most important ingredients in the supervised learning approach are <strong>which attributes</strong> of the data we feed into the machine learning process, and <strong>which model</strong> we then apply on the data.</p>
+<section id="input-vectors">
+<h3>Input Vectors<a class="headerlink" href="#input-vectors" title="Permalink to this heading">#</a></h3>
+<p>To start, we use a <em>one-hot encoding</em> of each of the different categories of data as our input vector. Later, you will be asked to see if you can find a better set of features to describe the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_input_vector</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">symm_vec</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">A_vec</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">B_vec</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">X_vec</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># i.e I3-&gt;[0, 3, 0], I2Cl-&gt;[1, 2, 0], Br3-&gt;[0, 0, 3]</span>
+    <span class="n">constant</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,]</span>
+    <span class="n">symm_vec</span><span class="p">[[</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;tetragonal&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;orthorhombic_1&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;orthorhombic_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">symmetry</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">A_vec</span><span class="p">[[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span> <span class="s1">&#39;FA&#39;</span><span class="p">,</span> <span class="s1">&#39;MA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">2</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">B_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;Pb&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">name</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">B_vec</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="s1">&#39;Sn&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">name</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="n">Xs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Cl&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;Br&#39;</span><span class="p">]</span>
+    <span class="n">nhalo</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">s</span> <span class="ow">in</span> <span class="n">Xs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">symbols</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">X</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Xs</span><span class="p">):</span>
+        <span class="n">X_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">([</span><span class="n">s</span> <span class="o">==</span> <span class="n">X</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">symbols</span><span class="p">])</span> <span class="o">//</span> <span class="n">nhalo</span>
+
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">symm_vec</span> <span class="o">+</span> <span class="n">A_vec</span> <span class="o">+</span> <span class="n">B_vec</span> <span class="o">+</span> <span class="n">X_vec</span> <span class="o">+</span> <span class="n">constant</span>
+    <span class="k">return</span> <span class="n">vec</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In a one-hot encoding, assign the data into different categorical classes, and then have one feature for each class. For example, there are four different symmetries in the data, so the first four features of the input vector describe which symmetry the material lies in. A ‘1’ in a given position indicates that the material falls into that class, while a ‘0’ indicates that it does not.</p>
+<p>As an example, we apply the encoding to the first few rows of the database with cubic symmetry, and show the formula and the name:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">symmetry</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;name=</span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> formula=</span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">formula</span><span class="si">}</span><span class="s1"> symmetry=</span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">symmetry</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;vec=</span><span class="si">{</span><span class="n">calculate_input_vector</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="o">*</span><span class="mi">79</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>name=MASnBr3 formula=SnBr3CH6N symmetry=cubic
+vec=[1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 3, 1]
+-------------------------------------------------------------------------------
+name=FAPbI2Cl formula=PbCClH5I2N2 symmetry=cubic
+vec=[1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 1]
+-------------------------------------------------------------------------------
+name=FAPbICl2 formula=PbCCl2H5IN2 symmetry=cubic
+vec=[1, 0, 0, 0, 0, 1, 0, 1, 0, 2, 1, 0, 1]
+-------------------------------------------------------------------------------
+name=FASnCl3 formula=SnCCl3H5N2 symmetry=cubic
+vec=[1, 0, 0, 0, 0, 1, 0, 0, 1, 3, 0, 0, 1]
+-------------------------------------------------------------------------------
+name=MAPbI3 formula=PbCH6I3N symmetry=cubic
+vec=[1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 3, 0, 1]
+-------------------------------------------------------------------------------
+</pre></div>
+</div>
+</div>
+</div>
+<p>We see that as expected, the row has a <code class="docutils literal notranslate"><span class="pre">1</span></code> in the first position, indicating that it has a cubic symmetry.</p>
+<p>We are now ready to generate the input matrix <span class="math notranslate nohighlight">\(X\)</span> that we will use in the machine learning process. At the same time we extract the indirect band gap as the target vector, <span class="math notranslate nohighlight">\(y\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">):</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculate_input_vector</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">gllbsc_ind_gap</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X.shape = &#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Y.shape =&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>X.shape =  (149, 13)
+Y.shape = (149, 1)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="modelling">
+<h3>Modelling<a class="headerlink" href="#modelling" title="Permalink to this heading">#</a></h3>
+<p>With the input and output in place, we are ready to do the initial machine
+learning. All supervised machine learning processes do the following, in a
+generalized sense:</p>
+<ul class="simple">
+<li><p>Select a general functional form for the model, parametrized in
+a suitable way.</p></li>
+<li><p>Find a loss function to evaluate the performance of a given set
+of parameters.</p></li>
+<li><p>Optimize the parameters of the model to minimize the loss.</p></li>
+</ul>
+<p>All the hard work is usually in the last step, since for complex models the
+relationship between the parameters and the loss function can be very
+difficult. However, for simpler models, we can sometimes find a closed form
+for the loss function.</p>
+<p>The very simplest class of machine learning models are just generalized
+linear models, where the target, <span class="math notranslate nohighlight">\(y\)</span>, is assumed to be a linear function of
+the input variables. You can read more about them
+<a class="reference external" href="http://scikit-learn.org/stable/modules/linear_model.html#ordinary-least-squares">here</a>. For a
+linear function, we guess a functional form <span class="math notranslate nohighlight">\(f(\mathbf{x}) = \sum_n w_n x_n = \mathbf w \cdot \mathbf x\)</span>, and seek to optimize the weight vector, <span class="math notranslate nohighlight">\(\mathbf w\)</span>.</p>
+<p>If we choose the loss function</p>
+<div class="math notranslate nohighlight">
+\[ L = \sum_i (f(\mathbf{x}_i) - y_i))^2 = \sum_{i} \left(\sum_{n}w_i x_{in} - y_i\right)^2 \]</div>
+<p>, we will recover ordinary least squares regression. In matrix terms, the loss corresponds to the norm <span class="math notranslate nohighlight">\( L = \left\| \mathbf{y} - \mathbf{X} \mathbf{w} \right\|^2\)</span>.
+The loss is minimal when the derivative with respect to the weight vector is zero. A bit of
+rearranging gives that this is true when</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf w = (\mathbf{X}^T\mathbf{X}) ^ {-1} \mathbf{X}^T \mathbf{y} \]</div>
+<p>Here <span class="math notranslate nohighlight">\(\mathbf w\)</span> is an (n_features, 1) weight vector that we are trying to
+find, <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> is an (n_samples , n_features) matrix of our observed
+inputs and <span class="math notranslate nohighlight">\(\mathbf y\)</span> is the (n_samples, 1) output vector that we are trying
+to predict.</p>
+<p>Write a function <code class="docutils literal notranslate"><span class="pre">fit</span></code>, which takes as input a matrix <span class="math notranslate nohighlight">\(\mathbf X\)</span>, and a
+target vector <span class="math notranslate nohighlight">\(\mathbf y\)</span>, and performs this linear regression, returning the
+list of weights and an estimate of the loss for this list of weights.</p>
+<p>Hint: useful functions are <code class="docutils literal notranslate"><span class="pre">np.dot()</span></code> and <code class="docutils literal notranslate"><span class="pre">np.linalg.inv()</span></code>, which calculate
+the dot product and inverse, respectively, of their arguments.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># Calculate the weights using the normal equation</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+    <span class="c1"># Calculate the loss</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">weights</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">weights</span><span class="p">,</span> <span class="n">loss</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can test your code on the following toy input - hopefully the weight vector you find is close to [1, 2, 3, 4, 5]</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nsamples</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">nfeatures</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">X_toy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">nfeatures</span><span class="p">)</span>
+<span class="n">coefficients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nfeatures</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nsamples</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">y_toy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_toy</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
+<span class="n">w</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">X_toy</span><span class="p">,</span> <span class="n">y_toy</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_toy</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="n">y_toy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/798074b811604da47005d43a70cf229029bd60fb85173a55012622ff2ee351ed.png" src="../../_images/798074b811604da47005d43a70cf229029bd60fb85173a55012622ff2ee351ed.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[1.05122241]
+ [2.01066979]
+ [3.0480331 ]
+ [3.86030761]
+ [5.09124831]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once that is working, try it on the original data! (hint: you have already calculated the matrix <span class="math notranslate nohighlight">\(X\)</span> and target vector <span class="math notranslate nohighlight">\(y\)</span> above) Does everything work as it should?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_toy</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="n">y_toy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">LinAlgError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">30</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">w</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_toy</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="n">y_toy</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="nn">Cell In[21], line 3,</span> in <span class="ni">fit</span><span class="nt">(X, y)</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="c1"># Calculate the weights using the normal equation</span>
+<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span><span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="c1"># Calculate the loss</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">y_pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">weights</span>
+
+<span class="nn">File &lt;__array_function__ internals&gt;:180,</span> in <span class="ni">inv</span><span class="nt">(*args, **kwargs)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/numpy/linalg/linalg.py:552,</span> in <span class="ni">inv</span><span class="nt">(a)</span>
+<span class="g g-Whitespace">    </span><span class="mi">550</span> <span class="n">signature</span> <span class="o">=</span> <span class="s1">&#39;D-&gt;D&#39;</span> <span class="k">if</span> <span class="n">isComplexType</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;d-&gt;d&#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">551</span> <span class="n">extobj</span> <span class="o">=</span> <span class="n">get_linalg_error_extobj</span><span class="p">(</span><span class="n">_raise_linalgerror_singular</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">552</span> <span class="n">ainv</span> <span class="o">=</span> <span class="n">_umath_linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">signature</span><span class="o">=</span><span class="n">signature</span><span class="p">,</span> <span class="n">extobj</span><span class="o">=</span><span class="n">extobj</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">553</span> <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">ainv</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">result_t</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/numpy/linalg/linalg.py:89,</span> in <span class="ni">_raise_linalgerror_singular</span><span class="nt">(err, flag)</span>
+<span class="g g-Whitespace">     </span><span class="mi">88</span> <span class="k">def</span> <span class="nf">_raise_linalgerror_singular</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">89</span>     <span class="k">raise</span> <span class="n">LinAlgError</span><span class="p">(</span><span class="s2">&quot;Singular matrix&quot;</span><span class="p">)</span>
+
+<span class="ne">LinAlgError</span>: Singular matrix
+</pre></div>
+</div>
+</div>
+</div>
+<p>One of the assumptions made in the derivation of the linear model is that the matrix <span class="math notranslate nohighlight">\((\mathbf{X}^T\mathbf{X})\)</span> is invertible. Unfortunately, that’s not true for our case. That’s because of <em>the encoding we have chosen</em>, which means for example that for any row, the first four columns must sum to one. The fourth column can therefore always be written as 1 - the sum of the first three.</p>
+<p>We can alleviate this by adding a <em>regularization term</em> to our loss function, which penalises large weights. The new loss is can then be written as  <span class="math notranslate nohighlight">\(L = \left\| \mathbf{y} - \mathbf{X} \mathbf{w} \right\|^2 + \alpha \left\| w\right\|^2\)</span>. Luckily, there is still a closed-form solution for this, namely <span class="math notranslate nohighlight">\(\mathbf w = (\mathbf{X}^T\mathbf{X} + \alpha \mathbf{I}) ^ {-1} \mathbf{X}^T \mathbf{y}\)</span>. Modify your <code class="docutils literal notranslate"><span class="pre">fit()</span></code> function to take an extra argument <span class="math notranslate nohighlight">\(\alpha\)</span>, and apply regularization to the original problem. Does everything work now? Do the weights of your model make sense? Try few different values for <span class="math notranslate nohighlight">\(\alpha\)</span>. How does the fit changes with <span class="math notranslate nohighlight">\(\alpha\)</span>?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_alpha</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
+    <span class="c1"># Calculate the weights using the normal equation</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">X</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span>
+    <span class="c1"># Calculate the loss</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">weights</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> 
+    <span class="k">return</span> <span class="n">weights</span><span class="p">,</span> <span class="n">loss</span>
+
+<span class="n">w</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">fit_alpha</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/e1e4eda1ab74a299b10b9032002ea9bf90afafdf139bcffa14218bbc26dca86f.png" src="../../_images/e1e4eda1ab74a299b10b9032002ea9bf90afafdf139bcffa14218bbc26dca86f.png" />
+</div>
+</div>
+<p>We can do all the things above in scikit-learn, which is a python software package for doing many different kinds of modelling.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<span class="n">linear</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="n">linear</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">ybar</span> <span class="o">=</span> <span class="n">linear</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">ybar</span><span class="p">))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.1</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ybar</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">lims</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()]),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()])</span>
+<span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lims</span><span class="p">,</span> <span class="n">lims</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted Band Gap [eV]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Actual Band Gap [eV]&#39;</span><span class="p">)</span>
+
+<span class="c1"># We can wrap the above in a function, to avoid typing that same code again later</span>
+<span class="k">def</span> <span class="nf">limits</span><span class="p">():</span>
+    <span class="n">lims</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()]),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()])</span>
+    <span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lims</span><span class="p">,</span> <span class="n">lims</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">make_comparison_plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">ybar</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ybar</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">limits</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Actual </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/528dac93282fa338658a6caf15a6bc4e84d4678d6caabbee75db65c0308db8ee.png" src="../../_images/528dac93282fa338658a6caf15a6bc4e84d4678d6caabbee75db65c0308db8ee.png" />
+</div>
+</div>
+<p>All the models in scikit-learn have a <code class="docutils literal notranslate"><span class="pre">fit</span></code> method, which expects an <span class="math notranslate nohighlight">\(X\)</span> matrix and a <span class="math notranslate nohighlight">\(y\)</span> vector as inputs, and then trains the model. They also have a <code class="docutils literal notranslate"><span class="pre">predict</span></code> method, which takes an <span class="math notranslate nohighlight">\(X\)</span> matrix as input and returns the <span class="math notranslate nohighlight">\(y\)</span> values predicted by the model. We use this to plot the true vs the predicted band gap.</p>
+<p>We can also inspect the parameters of the model to see which elements of the input vector are important to the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-5.03299589e+12 -5.03299589e+12 -5.03299589e+12 -5.03299589e+12
+  -1.04627264e+13 -1.04627264e+13 -1.04627264e+13 -3.26119721e+12
+  -3.26119721e+12 -1.22796404e+14 -1.22796404e+14 -1.22796404e+14
+   0.00000000e+00]]
+[3.87146133e+14]
+</pre></div>
+</div>
+</div>
+</div>
+<p>We see that despite the singular matrix, sklearn is able to do a linear fit, and returns sensible coefficients. Relying on this behaviour is rather brittle, and a better idea is to do as before and add a regularization parameter to the original loss function, which is done in the <code class="docutils literal notranslate"><span class="pre">linear_model.Ridge</span></code> model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+
+<span class="n">linear_regularized</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">Ridge</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">.5</span><span class="p">)</span>
+<span class="n">make_comparison_plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linear_regularized</span><span class="p">,</span> <span class="s2">&quot;Band Gap [eV]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/40d590ede9266bd7198169d667a8870b1e0e00c822cbae9e459d29c5bff4706b.png" src="../../_images/40d590ede9266bd7198169d667a8870b1e0e00c822cbae9e459d29c5bff4706b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">linear_regularized</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">linear_regularized</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-0.68084919 -0.06420949 -0.54285404  1.28791272 -0.30201487  0.09256458
+   0.20945029  0.20798577 -0.20798577  0.29271259 -0.30796792  0.01525534
+   0.        ]]
+[2.24012271]
+</pre></div>
+</div>
+</div>
+</div>
+<p>From visual inspection, it seems that the regularized model performs about as well as the original linear model.</p>
+<p>To proceed with the machine learning, we need some way of evaluating the performance of a model, which is better than visual inspection of predicted versus actual values, and an assessment of the reasonableness of model parameters. Scikit-learn provides a <code class="docutils literal notranslate"><span class="pre">score()</span></code> method for each model, which evaluates how good the fit is.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linear_regularized</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.8553941033673483
+</pre></div>
+</div>
+</div>
+</div>
+<p>To truly compare between models, we should ideally train on some data, and evaluate the model on a different set of data. Otherwise, we could create a perfect model just by storing all the input data, and looking up the correct answer. The way to do this is by cross-validation, where the data is randomly split into a number of buckets, and for each bucket, the model is trained on all the other data, and then tested on the data in the bucket. Since the data might have a meaningful order in the database, it is important that the assignment of the data to each bucket is done at random. This is accomplished by the <code class="docutils literal notranslate"><span class="pre">shuffle</span></code> argument to <code class="docutils literal notranslate"><span class="pre">KFold</span></code>.</p>
+<p>This approach of evaluating the performance of a model is very general and can also be used to optimize the so-called hyperparameters of a model, such as the regularization parameter <span class="math notranslate nohighlight">\(\alpha\)</span>. Here, we will not optimize <span class="math notranslate nohighlight">\(\alpha\)</span>, but only compare the performance of the <code class="docutils literal notranslate"><span class="pre">alpha=0</span></code> and <code class="docutils literal notranslate"><span class="pre">alpha=0.5</span></code> model. The score has been chosen so that the closer it is to 1, the better.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<span class="n">folds</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">linear_regularized</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">folds</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;explained_variance&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">folds</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;explained_variance&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.80900499 0.83075185]
+[0.81240273 0.82612602]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="modelling-the-heat-of-formation">
+<h3>Modelling the heat of formation<a class="headerlink" href="#modelling-the-heat-of-formation" title="Permalink to this heading">#</a></h3>
+<p>Having looked at the band gap, we turn now to the heat of formation, which was defined further up. Try using the heat of formation as a target vector <span class="math notranslate nohighlight">\(\mathbf y\)</span> instead of the band gap. See if it is possible to predict the heat of formation using (regularized) linear regression and the simple input vector defined above. You can use the following code to calculate the heat of formation of all the compounds in the database. Can you explain what it does?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">en_refs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">subproject</span><span class="o">=</span><span class="s1">&#39;references&#39;</span><span class="p">):</span>
+    <span class="n">en_refs</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">element</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">energy</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
+<span class="n">HoF</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;organometal&#39;</span><span class="p">):</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">energy</span>
+        <span class="c1"># how many units are in there!?</span>
+        <span class="n">n_units</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="kc">True</span> <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">symbols</span> <span class="k">if</span> <span class="n">symbol</span> <span class="o">==</span> <span class="s1">&#39;Pb&#39;</span> <span class="ow">or</span> <span class="n">symbol</span> <span class="o">==</span> <span class="s1">&#39;Sn&#39;</span><span class="p">])</span>
+        <span class="n">energy_standard</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">symbols</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Cs&#39;</span><span class="p">,</span><span class="s1">&#39;Pb&#39;</span><span class="p">,</span><span class="s1">&#39;Sn&#39;</span><span class="p">,</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="s1">&#39;Br&#39;</span><span class="p">,</span><span class="s1">&#39;Cl&#39;</span><span class="p">]:</span>
+                <span class="n">energy_standard</span> <span class="o">+=</span> <span class="n">en_refs</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;FA&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="n">energy_standard</span> <span class="o">+=</span> <span class="n">n_units</span> <span class="o">*</span> <span class="n">en_refs</span><span class="p">[</span><span class="s1">&#39;FA&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span>
+        <span class="k">if</span> <span class="s1">&#39;MA&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="n">energy_standard</span> <span class="o">+=</span> <span class="n">n_units</span> <span class="o">*</span> <span class="n">en_refs</span><span class="p">[</span><span class="s1">&#39;MA&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span>
+        <span class="n">HoF</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">energy</span><span class="o">-</span><span class="n">energy_standard</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_units</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>When searching for new materials, we would like to find only stable materials. These should have a negative heat of formation, and be in the most stable symmetry class of the four we are considering. The model we have just made will tell us whether a given compound has a negative heat of formation, but it won’t tell us whether a different symmetry class would have a lower energy.</p>
+<p>Predicting which symmetry class of the four is most stable for a given composition is a typical example of a classification problem: we would like to map a given composition, to which of the four symmetry classes is most stable. We start by creating the new output vector corresponding to our data. The output vector should have dimensions (n_compositions, 1), where n_compositions is the total number of different possible compositions without considering symmetries. For each composition, the output should indicate which of the symmetries in the database gives the lowest energy. An idea could be to reuse the <code class="docutils literal notranslate"><span class="pre">symmetry</span> <span class="pre">map</span></code> from further up.</p>
+<p>For the input vector, we can use the same one as before, only with the first four entries (corresponding to the symmetry class) removed.</p>
+<p>You should start by creating the target vector, which describes which symmetry is most stable for each composition:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define `X_hof` and `y_hof` in here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once you have that, we can start modelling this data. To try something different, we will be using a decision tree to classify the data. This can be imported as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn import tree
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(?, ?)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can visualize the tree using <code class="docutils literal notranslate"><span class="pre">graphviz</span></code>. Can you explain it?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">graphviz</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;first_cs&#39;</span><span class="p">,</span><span class="s1">&#39;first_FA&#39;</span><span class="p">,</span><span class="s1">&#39;first_MA&#39;</span><span class="p">,</span><span class="s1">&#39;lead&#39;</span><span class="p">,</span><span class="s1">&#39;tin&#39;</span><span class="p">,</span><span class="s1">&#39;chlorine&#39;</span><span class="p">,</span><span class="s1">&#39;iodine&#39;</span><span class="p">,</span><span class="s1">&#39;bromine&#39;</span><span class="p">,</span><span class="s1">&#39;reg&#39;</span><span class="p">]</span>
+<span class="n">target_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="s1">&#39;tetragonal&#39;</span><span class="p">,</span> <span class="s1">&#39;orthorhombic_1&#39;</span><span class="p">,</span> <span class="s1">&#39;orthorhombic_2&#39;</span><span class="p">]</span>
+<span class="n">dot_data</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">export_graphviz</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">feature_names</span> <span class="o">=</span> <span class="n">feature_names</span><span class="p">,</span>
+                                <span class="n">class_names</span> <span class="o">=</span> <span class="n">target_names</span><span class="p">,</span>
+                                <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">special_characters</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">Source</span><span class="p">(</span><span class="n">dot_data</span><span class="p">)</span>
+<span class="n">graph</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>One issue with decision trees is that it’s often easy to overfit the data, by making the depth of the tree too large. To see if this is occurring, we can compute the cross-validation score of the model for different sets of maximum depths:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folds</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">max_depth</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_hof</span><span class="p">,</span> <span class="n">y_hof</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">folds</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">scores</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Maximum depth&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cross-validation score&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="improving-the-input-vector">
+<h3>Improving the input vector<a class="headerlink" href="#improving-the-input-vector" title="Permalink to this heading">#</a></h3>
+<p>There is much more information we could include in the input vector, which might increase our predictive power of our model. An example could be the covalent radius of tin vs lead, or of the halogens, which will tend to increase or decrease the lattice constant of the whole crystal, and hence the energy. The covalent radii are available in <code class="docutils literal notranslate"><span class="pre">ase.data</span></code>, and can be imported as <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">ase.data</span> <span class="pre">import</span> <span class="pre">covalent_radii</span></code>. Another example could be the electronegativities of the halogens, which will play a role in the character of the bonds. The mulliken electronegativities of chlorine, bromine and iodine are 8.3, 7.59 and 6.76 respectively</p>
+<p>Start by redoing a basic examination of the data: plot the band gap and heats of formation against some of the quantities you might add, and see if there is any correlation. For the quantities that do have a correlation, try adding them to the input vector, and see which (if any) result in an improved model for either the heat of formation, the relative energetic ordering of the symmetry classes, or the band gap.</p>
+</section>
+<section id="improving-the-models">
+<h3>Improving the models<a class="headerlink" href="#improving-the-models" title="Permalink to this heading">#</a></h3>
+<p>Most phenomena we encounter don’t have nice linear relationships between inputs and outputs. We model nonlinear relationships in two different ways: we either introduce nonlinearity in our features, or in our model. The first
+is known as feature engineering, and requires a good method. The second makes optimizing the parameters of our model slightly more difficult, as we can lose many of the nice properties of the linear model, such as the closed-form solution.</p>
+<p>Here we will focus on gaussian process regression as a case study. You can read more about it <a class="reference external" href="http://scikit-learn.org/stable/modules/gaussian_process.html#gaussian-process">here</a>. This lets us fit nonlinear functions and also provides a confidence interval indicating how well the machine is doing.</p>
+<p>Similar to the <code class="docutils literal notranslate"><span class="pre">linear_regression</span></code>, we can import it from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> and create an example of the model with <code class="docutils literal notranslate"><span class="pre">model</span> <span class="pre">=</span> <span class="pre">GaussianProcessRegressor(kernel=YYY)</span></code>, where <code class="docutils literal notranslate"><span class="pre">YYY</span></code> is the kernel used. As a start, we should use a radial basis function, which is also available from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>. As usual, the model has a <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and a <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method, which sets the parameters of the model, and tries to predict outputs based on inputs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.gaussian_process</span> <span class="kn">import</span> <span class="n">GaussianProcessRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.gaussian_process.kernels</span> <span class="kn">import</span> <span class="n">RBF</span>
+
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">RBF</span><span class="p">(</span><span class="n">length_scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">GaussianProcessRegressor</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The model we have chosen is very dependent on the length scale we set for the kernel, and it is not given that the value chosen above (0.1) is a good choice. The fact that we have a score of 1.0 is an indication that we may be overfitting. The trick to selecting the best value of this parameter is again cross-validation. We can loop over different possible values of the hyperparameter to make different classes of models, and then evaluate the cross-validation score of each to see which performs best. Try this!</p>
+<p>Ideally you should find that length scales of ~1.0 perform best according to this scoring metric. In general, <code class="docutils literal notranslate"><span class="pre">scikit</span></code> has many tools for finding optimized hyperparameters for a given model - an example is <a class="reference external" href="http://scikit-learn.org/stable/auto_examples/model_selection/plot_grid_search_digits.html">GridSearchCV</a>, which automatically goes through all possible combinations of hyperparameters, finding the best one. You should note that there is a problem with using the Cross-validation scores we compute here to evaluate the performance of a given set of hyperparameters, which is very similar to the original problem of overfitting. Can you see what it is?</p>
+</section>
+</section>
+<section id="part-3-testing-and-evaluating-the-model">
+<h2>Part 3: Testing and evaluating the model<a class="headerlink" href="#part-3-testing-and-evaluating-the-model" title="Permalink to this heading">#</a></h2>
+<p>Now we’ve reached the stage where we start actually doing electronic structure calculations!</p>
+<p>We would like to test the models we have made by comparing the predicted quantities to calculated quantities. We are looking for a material that is not present in the database, and fulfills the following criteria:</p>
+<ul class="simple">
+<li><p>It has a negative heat of formation</p></li>
+<li><p>The cubic symmetry is the most stable for this composition class (due to computational cost of the other symmetry types)</p></li>
+<li><p>It has a band gap of approximately 1.5 eV</p></li>
+</ul>
+<p>It might not be possible to find a material that fulfills all, so try to find one, where the band gap of the cubic symmetry structure is close to 1.5 eV.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Determine all the materials in the database, that do not have the cubic symmetry calculated</span>
+<span class="n">names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;symmetry!=cubic&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s2">&quot;organometal&quot;</span><span class="p">))</span> <span class="o">-</span> \
+        <span class="nb">set</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s2">&quot;organometal&quot;</span><span class="p">,</span> <span class="n">symmetry</span><span class="o">=</span><span class="s2">&quot;cubic&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Ideally there is a structure similar to it in the database. To generate the new structure, we can therefore start with the atoms object of the similar structure. Suppose the identical structure is already present, only with lead instead of tin in the structure. We can then generate an initial guess for the starting structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>row = next(db.select(name=&#39;similar name&#39;, symmetry=&#39;similar symmetry&#39;))
+atoms = row.toatoms()
+symbols = atoms.get_chemical_symbols()
+new_symbols = [? if symbol == ? else symbol
+               for symbol in symbols]
+atoms.set_chemical_symbols(new_symbols)
+view(atoms)
+atoms.write(&quot;chosen_material.xyz&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Hopefully, you should see that the structure looks as expected! Unfortunately, the new structure is not in a relaxed configuration - by changing some of the atoms, we’ve also changed the forces on each atom. Before we calculate the energies and band gaps, we need to relax the structure. Note: because of the computational cost, select a cubic structure.</p>
+<p><strong>Tip</strong>: You can save the following cell to a file, say <code class="docutils literal notranslate"><span class="pre">myrelax.py</span></code>, by uncommenting the first line and using the next cell to submit it to the cluster by writing the following in a cell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!mq submit myrelax.py -R 8:1:4h
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%%writefile myrelax.py</span>
+<span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">GPAW</span><span class="p">,</span> <span class="n">FermiDirac</span><span class="p">,</span> <span class="n">PW</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">ase.optimize.bfgs</span> <span class="kn">import</span> <span class="n">BFGS</span>
+<span class="kn">from</span> <span class="nn">ase.constraints</span> <span class="kn">import</span> <span class="n">UnitCellFilter</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;chosen_material.xyz&#39;</span><span class="p">)</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_formula</span><span class="p">()</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">GPAW</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">PW</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+            <span class="n">kpts</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;PBE&#39;</span><span class="p">,</span>
+            <span class="n">txt</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_relax.out&#39;</span><span class="p">,</span>
+            <span class="n">occupations</span><span class="o">=</span><span class="n">FermiDirac</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+<span class="n">uf</span> <span class="o">=</span> <span class="n">UnitCellFilter</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">relax</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">uf</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_relax.log&#39;</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="s1">&#39;chosen_relax.traj&#39;</span><span class="p">)</span>
+<span class="n">relax</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># force is really a stress here</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once we have the relaxed structure, we are ready to roll! We need to calculate the heat of formation and band gap of this structure, and compare with our predicted values. Time permitting, we should also calculate the heat of formation of the three competing crystal symmetries, to really confirm that we are looking at the correct state. Standard DFT seriously underestimates the band gap. We thus use a more accurate method which includes the calculation of the derivative discontinuity, called GLLBSC. You can find more information about it <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.82.115106">here</a> and a benchmark of different methodologies <a class="reference external" href="https://doi.org/10.1002/aenm.201400915">here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%%writefile dft-gllb.py</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">GPAW</span><span class="p">,</span> <span class="n">FermiDirac</span><span class="p">,</span> <span class="n">PW</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;chosen_relax.traj&#39;</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">GPAW</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">PW</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span>
+            <span class="n">kpts</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;GLLBSC&#39;</span><span class="p">,</span>
+            <span class="n">occupations</span><span class="o">=</span><span class="n">FermiDirac</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+<span class="n">energy</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+
+<span class="c1"># Note! An accurate discontinuity calculation requires a k-point grid that</span>
+<span class="c1"># gives accurate HOMO/VBM and LUMO/CBM levels (in other words, the k-points of</span>
+<span class="c1"># the valence band maximum and the conduction band minimum should be</span>
+<span class="c1"># included in the used k-point grid).</span>
+<span class="n">homo</span><span class="p">,</span> <span class="n">lumo</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">get_homo_lumo</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">xc</span><span class="o">.</span><span class="n">response</span>
+<span class="n">dxc_pot</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">calculate_discontinuity_potential</span><span class="p">(</span><span class="n">homo</span><span class="p">,</span> <span class="n">lumo</span><span class="p">)</span>
+<span class="n">KS_gap</span><span class="p">,</span> <span class="n">dxc</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">calculate_discontinuity</span><span class="p">(</span><span class="n">dxc_pot</span><span class="p">)</span>
+<span class="n">gap</span> <span class="o">=</span> <span class="n">KS_gap</span> <span class="o">+</span> <span class="n">dxc</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The gap is </span><span class="si">{</span><span class="n">gap</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> with components: Kohn-Sham gap </span><span class="si">{</span><span class="n">KS_gap</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> and &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;discontinuity gap of </span><span class="si">{</span><span class="n">dxc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Do the resulting energies match your predictions?</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook/4_ml"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../3_modeling/5_1_particle_build.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Build nanoparticles</p>
+      </div>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-inspection-of-database">Part 1: Inspection of database</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-machine-learning">Part 2: Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-vectors">Input Vectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling">Modelling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-the-heat-of-formation">Modelling the heat of formation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-the-input-vector">Improving the input vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-the-models">Improving the models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-testing-and-evaluating-the-model">Part 3: Testing and evaluating the model</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By thangckt
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

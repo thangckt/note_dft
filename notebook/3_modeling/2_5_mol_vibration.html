@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Vibrational frequencies &#8212; Modeling materials using density functional theory</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/3_modeling/2_5_mol_vibration';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bulk" href="3_0_bulk_intro.html" />
+    <link rel="prev" title="Geometry optimization" href="2_4_mol_geo_optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Modeling materials using density functional theory</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to DFT</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/1_dft_introduction.html">Density Functional Theory (DFT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/2_dft_application_perspective.html">Application perspective of DFT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ASE + GPAW</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/0_ase_setup.html">Setup</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_ase/1_0_ase_intro.html">ASE</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_ase/1_1_ase_workflow.html">ASE workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/2_1_gpaw_terms.html">GPAW basic usage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">DFT modeling</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="2_0_mol_intro.html">Molecule</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2_1_mol_define_molecule.html">Building and Visualizing molecules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_2_mol_simple_properties.html">Simple properties with ASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_3_mol_simple_properties_single_run.html">Simple properties with single calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_4_mol_geo_optimization.html">Geometry optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Vibrational frequencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="3_0_bulk_intro.html">Bulk</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_1_particle_build.html">Build nanoparticles</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ML</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../4_ml/7_1_ml_design_mat.html">Design material with ML</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/thangckt/note_dft/edit/main/notebook/3_modeling/2_5_mol_vibration.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Vibrational frequencies</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-calculation-of-vibrational-frequency">Manual calculation of vibrational frequency</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-vibrational-calculations">Automated vibrational calculations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-point-energy-for-multiple-modes">Zero-point energy for multiple modes</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="vibrational-frequencies">
+<h1>Vibrational frequencies<a class="headerlink" href="#vibrational-frequencies" title="Permalink to this heading">#</a></h1>
+<section id="manual-calculation-of-vibrational-frequency">
+<h2>Manual calculation of vibrational frequency<a class="headerlink" href="#manual-calculation-of-vibrational-frequency" title="Permalink to this heading">#</a></h2>
+<p>The principle idea in calculating vibrational frequencies is that we consider a <strong>molecular</strong> system as **<strong>masses</strong> connected by <strong>springs</strong>. If the springs are Hookean, e.g. the force is proportional to the displacement, then we can readily solve the equations of motion and find that the <em>vibrational frequencies</em> are related to the <em>force constants</em> and the <em>masses of the atoms</em>.</p>
+<p>For example, in a simple molecule like CO where there is only one spring, the frequency is:</p>
+<p><span class="math notranslate nohighlight">\(\nu = \frac{1}{2\pi} \sqrt{k/\mu}\)</span> where <span class="math notranslate nohighlight">\(\frac{1}{\mu} = \frac{1}{m_C} + \frac{1}{m_O}\)</span> and <span class="math notranslate nohighlight">\(k\)</span> in the spring constant.</p>
+<p>We will compute the value of <span class="math notranslate nohighlight">\(k\)</span> from DFT calculations as follows <span class="math notranslate nohighlight">\(k = \frac{\partial^2 E}{\partial x^2}\)</span> at the equilibrium bond length. We actually already have the data to do this from <span class="xref myst">Manual determination of a bond length</span>. We only need to fit an equation to the energy vs. bond-length data, find the minimum energy bond-length, and then evaluate the second derivative of the fitted function at the minimum.</p>
+<p>We will use a cubic polynomial for demonstration here. Polynomials are numerically convenient because they are easy to fit, and it is trivial to get the roots and derivatives of the polynomials, as well as to evaluate them at other points using <code class="docutils literal notranslate"><span class="pre">numpy.polyfit</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy.polyder</span></code>, and <code class="docutils literal notranslate"><span class="pre">numpy.polyval</span></code>.</p>
+<p>Get energy from previous calculations</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">restart</span>
+
+<span class="n">bond_lengths</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">]</span>
+<span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">bond_lengths</span><span class="p">:</span>
+    <span class="n">mol</span><span class="p">,</span> <span class="n">calc</span> <span class="o">=</span> <span class="n">restart</span><span class="p">(</span><span class="s1">&#39;molecules/simple_CO_d</span><span class="si">{}</span><span class="s1">.gpw&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+    <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Fitting</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.units</span> <span class="kn">import</span> <span class="n">kg</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">m</span>
+<span class="kn">from</span> <span class="nn">ase.data</span> <span class="kn">import</span> <span class="n">atomic_masses</span>
+
+<span class="c1">## fit the data</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">bond_lengths</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># reture coeffs of polynomial  [deg, deg-1, … 0]</span>
+<span class="n">xfit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">)</span>
+<span class="n">efit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">xfit</span><span class="p">)</span>
+
+<span class="c1">### Find d_min</span>
+<span class="c1"># first derivative</span>
+<span class="c1"># find where the minimum is. chose the second one because it is the minimum we need.</span>
+<span class="n">droots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roots</span><span class="p">(</span><span class="n">dpars</span><span class="p">)</span>    <span class="c1"># 2 roots for degree=3</span>
+
+<span class="c1"># second derivative</span>
+<span class="n">ddpars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyder</span><span class="p">(</span><span class="n">dpars</span><span class="p">)</span>
+<span class="n">d_min</span> <span class="o">=</span> <span class="n">droots</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">ddpars</span><span class="p">,</span> <span class="n">droots</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># curvature at minimum = force constant in SI units</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">ddpars</span><span class="p">,</span> <span class="n">d_min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">J</span> <span class="o">/</span> <span class="n">m</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># mu, reduced mass</span>
+<span class="n">C_mass</span> <span class="o">=</span> <span class="n">atomic_masses</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">/</span> <span class="n">kg</span>
+<span class="n">O_mass</span> <span class="o">=</span> <span class="n">atomic_masses</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">/</span> <span class="n">kg</span>
+
+<span class="n">mu</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">C_mass</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">O_mass</span><span class="p">)</span>
+
+<span class="n">frequency</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span> <span class="o">/</span> <span class="n">mu</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The CO vibrational frequency is </span><span class="si">{0}</span><span class="s1"> Hz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">frequency</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The CO vibrational frequency is </span><span class="si">{0[0]}</span><span class="s1"> cm^{{-1}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frequency</span> <span class="o">/</span> <span class="mf">3e10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The CO vibrational frequency is 64876008880843.62 Hz
+The CO vibrational frequency is 2162.533629361454 cm^{-1}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">efit_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">d_min</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bond_lengths</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DFT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xfit</span><span class="p">,</span> <span class="n">efit</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">d_min</span><span class="p">,</span> <span class="n">efit_min</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;min_value&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Bond length ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Total energy (eV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper center&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/62a20f44272cfe4c32013561800f7c02914f6b5afbd508d614381779be8e0ef1.png" src="../../_images/62a20f44272cfe4c32013561800f7c02914f6b5afbd508d614381779be8e0ef1.png" />
+</div>
+</div>
+<p>This result is in good agreement with <a class="reference external" href="https://webbook.nist.gov/cgi/cbook.cgi?ID=C630080&amp;Units=SI&amp;Type=IR-SPEC&amp;Index=0#IR-SPEC">experiment</a>. The procedure described above is basically <em>how many vibrational calculations</em> are performed. With more atoms, you have to determine a force constant matrix and diagonalize it. For more details, see <span id="id1">[]</span>.</p>
+<p>In practice, we usually allow a packaged code to automate this, which we cover in [Automated vibrational calculations](./2_5_mol_vibration.html#Automated vibrational calculations).</p>
+<p>We now consider how much energy is in this vibration. This is commonly called <strong>zero-point energy (ZPE)</strong> and it is defined as <span class="math notranslate nohighlight">\(EZPE=\frac{1}{2}h\nu\)</span> for a single mode, and <span class="math notranslate nohighlight">\(h\)</span> is Planck’s constant <span class="math notranslate nohighlight">\((4.135667516e-15 eV/s)\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="mf">3e10</span>             <span class="c1"># speed of light cm/s</span>
+<span class="n">h</span> <span class="o">=</span> <span class="mf">4.135667516e-15</span>  <span class="c1"># eV*s</span>
+
+<span class="n">nu</span> <span class="o">=</span> <span class="mf">2143.6076625</span><span class="o">*</span><span class="n">c</span>  <span class="c1"># 1/s</span>
+
+<span class="n">E_zpe</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">nu</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;E_ZPE = </span><span class="si">{0:1.3f}</span><span class="s1"> eV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">E_zpe</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>E_ZPE = 0.133 eV
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is a reasonable amount of energy! Zero-point energy increases with increasing vibrational frequency, and tends to be very important for small atoms.</p>
+<p>A final note is that this analysis is in the <strong>“harmonic approximation”</strong>. The frequency equation is the solution to a harmonic oscillator. If the spring is non-linear, then there are anharmonic effects that may become important, especially at higher temperatures.</p>
+</section>
+<section id="automated-vibrational-calculations">
+<h2>Automated vibrational calculations<a class="headerlink" href="#automated-vibrational-calculations" title="Permalink to this heading">#</a></h2>
+<p>GPAW have many manual for calculations of <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/tutorialsexercises/vibrational/vibrational.html">vibration properties</a></p>
+<p>The calculation described here is dapted from <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/tutorialsexercises/vibrational/vibrations/vibrations.html">GPAW manual</a></p>
+<p>Density functional theory can be used to calculate vibrational frequencies of molecules, e.g. either in the gas phase or on a surface. These results can be compared to experimental output, e.g. from IR-spectroscopy. In this example we will calculate the vibrational frequencies for a water molecule.</p>
+<ul class="simple">
+<li><p>For a simple molecule, like <code class="docutils literal notranslate"><span class="pre">CO</span></code>, there is only one stretching mode. How would you calculate the vibrational frequency of this mode?</p></li>
+<li><p>For a general molecule with N atoms, how many modes are there? How many of them are vibrational modes? How would you do a calculation for the vibrational modes? Describe in detail which steps have to be performed.</p></li>
+</ul>
+<p>Calulate vibration with module <code class="docutils literal notranslate"><span class="pre">ase.vibrations</span></code>. You can specify:</p>
+<ul class="simple">
+<li><p>the number of displacements with <code class="docutils literal notranslate"><span class="pre">free</span></code>, default number of displacements is 2.</p></li>
+<li><p>the size of the displacement with <code class="docutils literal notranslate"><span class="pre">delta</span></code>, default is 0.01</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">pi</span>
+
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">from</span> <span class="nn">ase.optimize</span> <span class="kn">import</span> <span class="n">QuasiNewton</span>
+<span class="kn">from</span> <span class="nn">ase.vibrations</span> <span class="kn">import</span> <span class="n">Vibrations</span>
+
+<span class="kn">from</span> <span class="nn">ase.calculators.emt</span> <span class="kn">import</span> <span class="n">EMT</span>
+<span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">GPAW</span>
+
+<span class="c1"># Water molecule:</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mf">0.9575</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">*</span> <span class="mf">104.51</span>
+
+<span class="n">H2O</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="s1">&#39;H2O&#39;</span><span class="p">,</span>
+            <span class="n">positions</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                       <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                       <span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">d</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="n">H2O</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">vacuum</span><span class="o">=</span><span class="mf">3.5</span><span class="p">)</span>
+
+<span class="c1">## GPAW calculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">GPAW</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lcao&#39;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;dzp&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s1">&#39;molecules/h2o.txt&#39;</span><span class="p">)</span>
+<span class="c1"># calc = EMT()</span>
+<span class="n">H2O</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+
+<span class="c1">## Minimize</span>
+<span class="n">QuasiNewton</span><span class="p">(</span><span class="n">H2O</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                Step[ FC]     Time          Energy          fmax
+*Force-consistent energies used in optimization.
+BFGSLineSearch:    0[  0] 16:42:54       -9.313801*       5.8622
+BFGSLineSearch:    1[  1] 16:42:56      -10.846138*       7.7659
+BFGSLineSearch:    2[  2] 16:42:57      -12.601781*       7.3392
+BFGSLineSearch:    3[  3] 16:42:58      -13.334419*       4.4396
+BFGSLineSearch:    4[  5] 16:43:01      -13.505857*       2.8911
+BFGSLineSearch:    5[  7] 16:43:04      -13.704775*       1.0850
+BFGSLineSearch:    6[  9] 16:43:06      -13.719613*       0.1253
+BFGSLineSearch:    7[ 10] 16:43:06      -13.719917*       0.0452
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Calculate the vibrational modes of a H2O molecule.&quot;&quot;&quot;</span>
+
+<span class="c1"># Create vibration calculator</span>
+<span class="n">vib</span> <span class="o">=</span> <span class="n">Vibrations</span><span class="p">(</span><span class="n">H2O</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">nfree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># vib.symmetry=&#39;off&#39;</span>
+<span class="n">vib</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="c1"># vib.summary(method=&#39;frederiksen&#39;)</span>
+<span class="n">vib</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="c1"># Make trajectory files to visualize normal modes:</span>
+<span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+    <span class="n">vib</span><span class="o">.</span><span class="n">write_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">vib</span> <span class="o">=</span> <span class="n">Vibrations</span><span class="p">(</span><span class="n">H2O</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">nfree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># vib.symmetry=&#39;off&#39;</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">vib</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># vib.summary(method=&#39;frederiksen&#39;)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">vib</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/ase/vibrations/vibrations.py:205,</span> in <span class="ni">Vibrations.run</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span> <span class="k">if</span> <span class="n">handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="k">continue</span>
+<span class="ne">--&gt; </span><span class="mi">205</span> <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">disp</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span> <span class="k">if</span> <span class="n">world</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="n">handle</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/ase/vibrations/vibrations.py:264,</span> in <span class="ni">Vibrations.calculate</span><span class="nt">(self, atoms, disp)</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span> <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">disp</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span>     <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="ne">--&gt; </span><span class="mi">264</span>     <span class="n">results</span><span class="p">[</span><span class="s1">&#39;forces&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc</span><span class="o">.</span><span class="n">get_forces</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ir</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">267</span>         <span class="n">results</span><span class="p">[</span><span class="s1">&#39;dipole&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc</span><span class="o">.</span><span class="n">get_dipole_moment</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/ase/calculators/abc.py:30,</span> in <span class="ni">GetPropertiesMixin.get_forces</span><span class="nt">(self, atoms)</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="k">def</span> <span class="nf">get_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">30</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s1">&#39;forces&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/ase/calculators/calculator.py:501,</span> in <span class="ni">BaseCalculator.get_property</span><span class="nt">(self, name, atoms, allow_calculation)</span>
+<span class="g g-Whitespace">    </span><span class="mi">498</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cache</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">499</span>         <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">501</span>     <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">system_changes</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">504</span>     <span class="c1"># For some reason the calculator was not able to do what we want,</span>
+<span class="g g-Whitespace">    </span><span class="mi">505</span>     <span class="c1"># and that is OK.</span>
+<span class="g g-Whitespace">    </span><span class="mi">506</span>     <span class="k">raise</span> <span class="n">PropertyNotImplementedError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> not present in this &#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">507</span>                                       <span class="s1">&#39;calculation&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/calculator.py:353,</span> in <span class="ni">GPAW.calculate</span><span class="nt">(self, atoms, properties, system_changes)</span>
+<span class="g g-Whitespace">    </span><span class="mi">351</span> <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;energy&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">352</span>               <span class="n">system_changes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell&#39;</span><span class="p">]):</span>
+<span class="ne">--&gt; </span><span class="mi">353</span>     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">icalculate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">system_changes</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">354</span>         <span class="k">pass</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/calculator.py:376,</span> in <span class="ni">GPAW.icalculate</span><span class="nt">(self, atoms, properties, system_changes)</span>
+<span class="g g-Whitespace">    </span><span class="mi">373</span>         <span class="bp">self</span><span class="o">.</span><span class="n">scf</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">374</span>         <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">376</span>     <span class="bp">self</span><span class="o">.</span><span class="n">set_positions</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">378</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">379</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/calculator.py:578,</span> in <span class="ni">GPAW.set_positions</span><span class="nt">(self, atoms)</span>
+<span class="g g-Whitespace">    </span><span class="mi">576</span> <span class="k">def</span> <span class="nf">set_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">577</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Update the positions of the atoms and initialize wave functions.&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">578</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_positions</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">580</span>     <span class="n">nlcao</span><span class="p">,</span> <span class="n">nrand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfs</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">density</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">581</span>                                        <span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">582</span>     <span class="k">if</span> <span class="n">nlcao</span> <span class="o">+</span> <span class="n">nrand</span><span class="p">:</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/calculator.py:572,</span> in <span class="ni">GPAW.initialize_positions</span><span class="nt">(self, atoms)</span>
+<span class="g g-Whitespace">    </span><span class="mi">570</span> <span class="n">rank_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfs</span><span class="o">.</span><span class="n">gd</span><span class="o">.</span><span class="n">get_ranks_from_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">571</span> <span class="n">atom_partition</span> <span class="o">=</span> <span class="n">AtomPartition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfs</span><span class="o">.</span><span class="n">gd</span><span class="o">.</span><span class="n">comm</span><span class="p">,</span> <span class="n">rank_a</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;gd&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">572</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfs</span><span class="o">.</span><span class="n">set_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span><span class="p">,</span> <span class="n">atom_partition</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">573</span> <span class="bp">self</span><span class="o">.</span><span class="n">density</span><span class="o">.</span><span class="n">set_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span><span class="p">,</span> <span class="n">atom_partition</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">574</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">set_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span><span class="p">,</span> <span class="n">atom_partition</span><span class="p">)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/wavefunctions/lcao.py:177,</span> in <span class="ni">LCAOWaveFunctions.set_positions</span><span class="nt">(self, spos_ac, atom_partition, move_wfs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span> <span class="n">oldspos_ac</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span>
+<span class="g g-Whitespace">    </span><span class="mi">176</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s1">&#39;Basic WFS set positions&#39;</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">177</span>     <span class="n">WaveFunctions</span><span class="o">.</span><span class="n">set_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spos_ac</span><span class="p">,</span> <span class="n">atom_partition</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">179</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s1">&#39;Basis functions set positions&#39;</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span>     <span class="bp">self</span><span class="o">.</span><span class="n">basis_functions</span><span class="o">.</span><span class="n">set_positions</span><span class="p">(</span><span class="n">spos_ac</span><span class="p">)</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/wavefunctions/base.py:246,</span> in <span class="ni">WaveFunctions.set_positions</span><span class="nt">(self, spos_ac, atom_partition)</span>
+<span class="g g-Whitespace">    </span><span class="mi">243</span>             <span class="k">assert</span> <span class="n">atom_partition</span> <span class="o">==</span> <span class="n">kpt</span><span class="o">.</span><span class="n">projections</span><span class="o">.</span><span class="n">atom_partition</span>
+<span class="g g-Whitespace">    </span><span class="mi">245</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_partition</span> <span class="o">=</span> <span class="n">atom_partition</span>
+<span class="ne">--&gt; </span><span class="mi">246</span> <span class="bp">self</span><span class="o">.</span><span class="n">kd</span><span class="o">.</span><span class="n">symmetry</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">spos_ac</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">247</span> <span class="bp">self</span><span class="o">.</span><span class="n">spos_ac</span> <span class="o">=</span> <span class="n">spos_ac</span>
+
+<span class="nn">File ~/app/miniconda3/envs/py310gpaw/lib/python3.10/site-packages/gpaw/symmetry.py:246,</span> in <span class="ni">Symmetry.check</span><span class="nt">(self, spos_ac)</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="bp">self</span><span class="o">.</span><span class="n">prune_symmetries_atoms</span><span class="p">(</span><span class="n">spos_ac</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">245</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">op_scc</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">nsymold</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">246</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Broken symmetry!&#39;</span><span class="p">)</span>
+
+<span class="ne">RuntimeError</span>: Broken symmetry!
+</pre></div>
+</div>
+</div>
+</div>
+<section id="zero-point-energy-for-multiple-modes">
+<h3>Zero-point energy for multiple modes<a class="headerlink" href="#zero-point-energy-for-multiple-modes" title="Permalink to this heading">#</a></h3>
+<p>For a molecule with lots of <em>vibrational modes</em> the zero-point energy is defined as the <em>sum over all</em> the vibrational modes:</p>
+<p><span class="math notranslate nohighlight">\(EZPE = \sum_i \frac{1}{2}h \nu_i\)</span></p>
+<p>Here is an example for water. Note we do not sum over the imaginary modes. We should also ignore the rotational and translational modes (some of those are imaginary, but some are just small).</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook/3_modeling"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2_4_mol_geo_optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Geometry optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="3_0_bulk_intro.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Bulk</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-calculation-of-vibrational-frequency">Manual calculation of vibrational frequency</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-vibrational-calculations">Automated vibrational calculations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-point-energy-for-multiple-modes">Zero-point energy for multiple modes</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By thangckt
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,651 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Building and Visualizing molecules &#8212; Modeling materials using density functional theory</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/3_modeling/2_1_mol_define_molecule';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Simple properties with ASE" href="2_2_mol_simple_properties.html" />
+    <link rel="prev" title="Molecule" href="2_0_mol_intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Modeling materials using density functional theory</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to DFT</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/1_dft_introduction.html">Density Functional Theory (DFT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/2_dft_application_perspective.html">Application perspective of DFT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ASE + GPAW</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/0_ase_setup.html">Setup</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_ase/1_0_ase_intro.html">ASE</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_ase/1_1_ase_workflow.html">ASE workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/2_1_gpaw_terms.html">GPAW basic usage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">DFT modeling</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="2_0_mol_intro.html">Molecule</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Building and Visualizing molecules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_2_mol_simple_properties.html">Simple properties with ASE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_3_mol_simple_properties_single_run.html">Simple properties with single calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_4_mol_geo_optimization.html">Geometry optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_5_mol_vibration.html">Vibrational frequencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="3_0_bulk_intro.html">Bulk</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_1_particle_build.html">Build nanoparticles</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ML</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../4_ml/7_1_ml_design_mat.html">Design material with ML</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/thangckt/note_dft/edit/main/notebook/3_modeling/2_1_mol_define_molecule.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Building and Visualizing molecules</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-scratch">From scratch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-other-data-formats">Reading other data formats</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ases-predefined-molecules">ASE’s Predefined molecules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulate-molecules">Manipulate molecules</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rotate-molecules">Rotate molecules</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-atoms-objects">Combine Atoms objects</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="building-and-visualizing-molecules">
+<h1>Building and Visualizing molecules<a class="headerlink" href="#building-and-visualizing-molecules" title="Permalink to this heading">#</a></h1>
+<p>This section describes methods to model molecule using <a class="reference external" href="https://wiki.fysik.dtu.dk/ase">ASE</a></p>
+<section id="from-scratch">
+<h2>From scratch<a class="headerlink" href="#from-scratch" title="Permalink to this heading">#</a></h2>
+<p>When there is no data file for molecules, we define it by hand</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load modules</span>
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">Atom</span>
+<span class="kn">from</span> <span class="nn">ase.visualize</span> <span class="kn">import</span> <span class="n">view</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define an Atoms object</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">([</span><span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span>
+                <span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])],</span>
+                <span class="n">cell</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;V = </span><span class="si">{0:1.0f}</span><span class="s1"> Ang^3&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_volume</span><span class="p">()))</span>     
+
+<span class="c1"># visualize</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># to view box</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>V = 1000 Ang^3
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "7ca4c31400d347f4bff1a5cb36906740", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>There are two <strong>inconvenient features</strong> of the simple cubic cell:</p>
+<ol class="arabic simple">
+<li><p>Since the CO molecule is at the corner, its electron density is spread over the 8 corners of the box, which is not convenient for visualization later (see Visualizing electron density).</p></li>
+<li><p>Due to the geometry of the cube, you need fairly large cubes to make sure the electron density of the molecule does not overlap with that of its images. Electron-electron interactions are repulsive, and the overlap makes the energy <em>increase</em> significantly.</p></li>
+</ol>
+<p>The first problem is easily solved by centering the atoms in the unit cell. The second problem can be solved by using a face-centered cubic lattice, which is the lattice with the closest packing. We show the results of the centering below, where we have guessed values for <code class="docutils literal notranslate"><span class="pre">b</span></code> until the CO molecules are on average 10 Å apart.</p>
+<p>Note the final volume is only about 715 <span class="math notranslate nohighlight">\(\AA^3\)</span>, which is smaller than the cube. This will result in <em>less computational time</em> to compute properties.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## use FCC lattice</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">7.1</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">([</span><span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span>
+                <span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])],</span>
+                <span class="n">cell</span><span class="o">=</span><span class="p">[[</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span>
+                <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="p">]])</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">()</span> <span class="c1"># translate atoms to center of unit cell</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e1436386e27e496794d1a74952d1628f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><strong>How do you know the distance to the neighboring image?</strong></p>
+<p>All we have to do is figure out the length of each lattice vector, because these are what separate the atoms in the images.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get unit cell vectors and their lengths</span>
+<span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">)</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_cell</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|a1| = </span><span class="si">{0:1.2f}</span><span class="s1"> Ang&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a1</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|a2| = </span><span class="si">{0:1.2f}</span><span class="s1"> Ang&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">a2</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|a3| = </span><span class="si">{0:1.2f}</span><span class="s1"> Ang&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a3</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;V = </span><span class="si">{0:1.0f}</span><span class="s1"> Ang^3&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_volume</span><span class="p">()))</span>    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>|a1| = 10.04 Ang
+|a2| = 10.04 Ang
+|a3| = 10.04 Ang
+V = 716 Ang^3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reading-other-data-formats">
+<h2>Reading other data formats<a class="headerlink" href="#reading-other-data-formats" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://wiki.fysik.dtu.dk/ase/ase/io/io.html"><code class="docutils literal notranslate"><span class="pre">ase.io</span></code></a> supports many different file formats.</p>
+<p>A covenient way if reading <code class="docutils literal notranslate"><span class="pre">.cif</span></code> format from <a class="reference external" href="http://www.crystallography.net/cod/">Crystallography Open Database</a> from <a class="reference external" href="https://materialsproject.org/">Material Project</a></p>
+<div class="highlight-note notranslate"><div class="highlight"><pre><span></span>The XYZ format does not have unit cell information in it, so you will have to figure out a way to provide it.
+`atoms.center(vacuum=5)` in `ase` is a qick for that
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;molecules/isobutane.xyz&#39;</span><span class="p">)</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">vacuum</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "09c0bd74c48442c7a610fbccf614410b", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="ases-predefined-molecules">
+<h2>ASE’s Predefined molecules<a class="headerlink" href="#ases-predefined-molecules" title="Permalink to this heading">#</a></h2>
+<p><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">ase.data</span></code></span> contains a broad set of atoms
+and molecules for which good experimental data exists, making them useful for benchmarking studies</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.data</span> <span class="kn">import</span> <span class="n">g2</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">keys</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;Be&#39;, &#39;BeH&#39;, &#39;C&#39;, &#39;C2H2&#39;, &#39;C2H4&#39;, &#39;C2H6&#39;, &#39;CH&#39;, &#39;CH2_s1A1d&#39;, &#39;CH2_s3B1d&#39;, &#39;CH3&#39;, &#39;CH3Cl&#39;, &#39;CH3OH&#39;, &#39;CH3SH&#39;, &#39;CH4&#39;, &#39;CN&#39;, &#39;CO&#39;, &#39;CO2&#39;, &#39;CS&#39;, &#39;Cl&#39;, &#39;Cl2&#39;, &#39;ClF&#39;, &#39;ClO&#39;, &#39;F&#39;, &#39;F2&#39;, &#39;H&#39;, &#39;H2CO&#39;, &#39;H2O&#39;, &#39;H2O2&#39;, &#39;HCN&#39;, &#39;HCO&#39;, &#39;HCl&#39;, &#39;HF&#39;, &#39;HOCl&#39;, &#39;Li&#39;, &#39;Li2&#39;, &#39;LiF&#39;, &#39;LiH&#39;, &#39;N&#39;, &#39;N2&#39;, &#39;N2H4&#39;, &#39;NH&#39;, &#39;NH2&#39;, &#39;NH3&#39;, &#39;NO&#39;, &#39;Na&#39;, &#39;Na2&#39;, &#39;NaCl&#39;, &#39;O&#39;, &#39;O2&#39;, &#39;OH&#39;, &#39;P&#39;, &#39;P2&#39;, &#39;PH2&#39;, &#39;PH3&#39;, &#39;S&#39;, &#39;S2&#39;, &#39;SH2&#39;, &#39;SO&#39;, &#39;SO2&#39;, &#39;Si&#39;, &#39;Si2&#39;, &#39;Si2H6&#39;, &#39;SiH2_s1A1d&#39;, &#39;SiH2_s3B1d&#39;, &#39;SiH3&#39;, &#39;SiH4&#39;, &#39;SiO&#39;, &#39;2-butyne&#39;, &#39;Al&#39;, &#39;AlCl3&#39;, &#39;AlF3&#39;, &#39;B&#39;, &#39;BCl3&#39;, &#39;BF3&#39;, &#39;C2Cl4&#39;, &#39;C2F4&#39;, &#39;C2H3&#39;, &#39;C2H5&#39;, &#39;C2H6CHOH&#39;, &#39;C2H6NH&#39;, &#39;C2H6SO&#39;, &#39;C3H4_C2v&#39;, &#39;C3H4_C3v&#39;, &#39;C3H4_D2d&#39;, &#39;C3H6_Cs&#39;, &#39;C3H6_D3h&#39;, &#39;C3H7&#39;, &#39;C3H7Cl&#39;, &#39;C3H8&#39;, &#39;C3H9C&#39;, &#39;C3H9N&#39;, &#39;C4H4NH&#39;, &#39;C4H4O&#39;, &#39;C4H4S&#39;, &#39;C5H5N&#39;, &#39;C5H8&#39;, &#39;C6H6&#39;, &#39;CCH&#39;, &#39;CCl4&#39;, &#39;CF3CN&#39;, &#39;CF4&#39;, &#39;CH2NHCH2&#39;, &#39;CH2OCH2&#39;, &#39;CH2SCH2&#39;, &#39;CH3CH2Cl&#39;, &#39;CH3CH2NH2&#39;, &#39;CH3CH2O&#39;, &#39;CH3CH2OCH3&#39;, &#39;CH3CH2OH&#39;, &#39;CH3CH2SH&#39;, &#39;CH3CHO&#39;, &#39;CH3CN&#39;, &#39;CH3CO&#39;, &#39;CH3COCH3&#39;, &#39;CH3COCl&#39;, &#39;CH3COF&#39;, &#39;CH3CONH2&#39;, &#39;CH3COOH&#39;, &#39;CH3NO2&#39;, &#39;CH3O&#39;, &#39;CH3OCH3&#39;, &#39;CH3ONO&#39;, &#39;CH3S&#39;, &#39;CH3SCH3&#39;, &#39;CH3SiH3&#39;, &#39;COF2&#39;, &#39;CS2&#39;, &#39;ClF3&#39;, &#39;ClNO&#39;, &#39;F2O&#39;, &#39;H2&#39;, &#39;H2CCHCN&#39;, &#39;H2CCHCl&#39;, &#39;H2CCHF&#39;, &#39;H2CCO&#39;, &#39;H2CCl2&#39;, &#39;H2CF2&#39;, &#39;H2COH&#39;, &#39;H3CNH2&#39;, &#39;HCCl3&#39;, &#39;HCF3&#39;, &#39;HCOOCH3&#39;, &#39;HCOOH&#39;, &#39;N2O&#39;, &#39;NCCN&#39;, &#39;NF3&#39;, &#39;NO2&#39;, &#39;O3&#39;, &#39;OCHCHO&#39;, &#39;OCS&#39;, &#39;PF3&#39;, &#39;SH&#39;, &#39;SiCl4&#39;, &#39;SiF4&#39;, &#39;bicyclobutane&#39;, &#39;butadiene&#39;, &#39;cyclobutane&#39;, &#39;cyclobutene&#39;, &#39;isobutane&#39;, &#39;isobutene&#39;, &#39;methylenecyclopropane&#39;, &#39;trans-butane&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">molecule</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;CH3CN&#39;</span><span class="p">)</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">vacuum</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "36eeea50f02b4448929788caac623047", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="manipulate-molecules">
+<h2>Manipulate molecules<a class="headerlink" href="#manipulate-molecules" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://wiki.fysik.dtu.dk/ase/gettingstarted/manipulating_atoms/manipulating_atoms.html"><code class="docutils literal notranslate"><span class="pre">ase.Atoms</span></code></a> provides many ways for manipulates molecules</p>
+<section id="rotate-molecules">
+<h3>Rotate molecules<a class="headerlink" href="#rotate-molecules" title="Permalink to this heading">#</a></h3>
+<p>Using <code class="docutils literal notranslate"><span class="pre">ase.Atoms.rotate</span></code>, and consider:</p>
+<ul class="simple">
+<li><p>Whether the center of mass should be fixed or not</p></li>
+<li><p>Whether or not the unit cell should be rotated</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">molecule</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;CH3CN&#39;</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">vacuum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">pbc</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="s1">&#39;COM&#39;</span><span class="p">,</span> <span class="n">rotate_cell</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="s1">&#39;COM&#39;</span><span class="p">,</span> <span class="n">rotate_cell</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;difference in positions after rotating&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;atom    difference vector&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------&#39;</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_positions</span><span class="p">()</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">p1</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">diff</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+
+<span class="c1"># visualize</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>difference in positions after rotating
+atom    difference vector
+--------------------------------------
+0 [-0.01782051  0.01782219  0.0002443 ]
+1 [ 2.20136479e-03 -2.20157163e-03 -3.01777230e-05]
+2 [ 0.01835166 -0.01835339 -0.00025158]
+3 [-0.02277373  0.02287218  0.01436336]
+4 [-0.02314601  0.02301662 -0.01887695]
+5 [-0.02297922  0.02301662  0.0054581 ]
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a146fdd9bd434363bd0d89f8b48e98d8", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="combine-atoms-objects">
+<h3>Combine Atoms objects<a class="headerlink" href="#combine-atoms-objects" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">molecule</span>
+
+<span class="n">atoms1</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;NH3&#39;</span><span class="p">)</span>
+<span class="n">atoms2</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;O2&#39;</span><span class="p">)</span>
+<span class="n">atoms2</span><span class="o">.</span><span class="n">translate</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms1</span> <span class="o">+</span> <span class="n">atoms2</span>
+
+<span class="c1"># atoms.pbc = True</span>
+<span class="n">view</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">viewer</span><span class="o">=</span><span class="s1">&#39;ngl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "caab5d93c32a410f99e5804b1db44a85", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook/3_modeling"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2_0_mol_intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Molecule</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2_2_mol_simple_properties.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Simple properties with ASE</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-scratch">From scratch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-other-data-formats">Reading other data formats</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ases-predefined-molecules">ASE’s Predefined molecules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulate-molecules">Manipulate molecules</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rotate-molecules">Rotate molecules</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-atoms-objects">Combine Atoms objects</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By thangckt
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

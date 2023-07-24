@@ -1,0 +1,736 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Simple properties with single calculation &#8212; Modeling materials using density functional theory</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/3_modeling/2_3_mol_simple_properties_single_run';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Geometry optimization" href="2_4_mol_geo_optimization.html" />
+    <link rel="prev" title="Simple properties with ASE" href="2_2_mol_simple_properties.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Modeling materials using density functional theory</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to DFT</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/1_dft_introduction.html">Density Functional Theory (DFT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_dft_theory/2_dft_application_perspective.html">Application perspective of DFT</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ASE + GPAW</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/0_ase_setup.html">Setup</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../2_ase/1_0_ase_intro.html">ASE</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../2_ase/1_1_ase_workflow.html">ASE workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2_ase/2_1_gpaw_terms.html">GPAW basic usage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">DFT modeling</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="2_0_mol_intro.html">Molecule</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2_1_mol_define_molecule.html">Building and Visualizing molecules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_2_mol_simple_properties.html">Simple properties with ASE</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Simple properties with single calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_4_mol_geo_optimization.html">Geometry optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2_5_mol_vibration.html">Vibrational frequencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="3_0_bulk_intro.html">Bulk</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_1_particle_build.html">Build nanoparticles</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ML</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../4_ml/7_1_ml_design_mat.html">Design material with ML</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/thangckt/note_dft/edit/main/notebook/3_modeling/2_3_mol_simple_properties_single_run.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button"
+   title="Suggest edit"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Simple properties with single calculation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-and-forces">Energy and forces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-with-size-of-unit-cell">Convergence with size of unit cell</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-of-energy-cutoff">Convergence of energy Cutoff</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-electron-density">Visualizing electron density</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-density-of-states-dos">The density of states (DOS)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#electrostatic-potential">Electrostatic potential</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="simple-properties-with-single-calculation">
+<h1>Simple properties with single calculation<a class="headerlink" href="#simple-properties-with-single-calculation" title="Permalink to this heading">#</a></h1>
+<p>There are many properties that only require a single DFT calculation to obtain:</p>
+<ul class="simple">
+<li><p>energy</p></li>
+<li><p>forces</p></li>
+<li><p>density of states</p></li>
+<li><p>electron density</p></li>
+<li><p>electrostatic potential.</p></li>
+</ul>
+<p>This section describes some of these calculations and their analysis.</p>
+<p>We use <code class="docutils literal notranslate"><span class="pre">gpaw.GPAW</span></code> caclulator, see all its <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/documentation/basic.html#parameters">input parameters</a></p>
+<section id="energy-and-forces">
+<h2>Energy and forces<a class="headerlink" href="#energy-and-forces" title="Permalink to this heading">#</a></h2>
+<p>Two of the most important quantities are the total energy and the forces on the atoms.</p>
+<p>Here is an example of getting the energy and forces from a CO molecule.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span><span class="p">,</span> <span class="n">Atom</span>
+<span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">GPAW</span><span class="p">,</span> <span class="n">PW</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define molecule</span>
+<span class="n">co</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">([</span><span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+            <span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])],</span>
+           <span class="n">cell</span><span class="o">=</span><span class="p">(</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">),</span> <span class="p">)</span>
+
+<span class="c1"># gpaw calculator:</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">GPAW</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">PW</span><span class="p">(</span><span class="mi">550</span><span class="p">),</span>       <span class="c1"># planewave cutoff  350</span>
+            <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;PBE&#39;</span><span class="p">,</span>             <span class="c1"># the exchange-correlation functional</span>
+            <span class="n">nbands</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>             <span class="c1"># number of bands</span>
+            <span class="n">occupations</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;methfessel-paxton&#39;</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>    <span class="c1"># Methfessel-Paxton smearing</span>
+            <span class="n">txt</span><span class="o">=</span><span class="s1">&#39;molecules/simple_CO.out&#39;</span><span class="p">)</span>   <span class="c1"># output file</span>
+
+<span class="n">co</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>     <span class="c1"># set calculator</span>
+<span class="n">energy</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+<span class="n">force</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">get_forces</span><span class="p">()</span>
+
+<span class="c1">## write restart file</span>
+<span class="n">calc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;molecules/simple_CO.gpw&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;energy = </span><span class="si">{0}</span><span class="s1"> eV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">force</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>energy = -14.762042929054388 eV
+[[ 5.68157983e+00  3.80295547e-30  0.00000000e+00]
+ [-5.67924814e+00  0.00000000e+00  0.00000000e+00]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the forces are only along the x-axis, which is along the molecular axis. The forces in this case are very high, indicating that this geometry is not close to the ground state geometry.We need to minimize system.</p>
+<section id="convergence-with-size-of-unit-cell">
+<h3>Convergence with size of unit cell<a class="headerlink" href="#convergence-with-size-of-unit-cell" title="Permalink to this heading">#</a></h3>
+<p>There are a number of parameters that affect the energy and forces including</p>
+<ul class="simple">
+<li><p>calculation parameters and</p></li>
+<li><p>the unit cell.</p></li>
+</ul>
+<p>We will first consider the <em>effect of the unit cell</em> on the total energy and forces. The reason that the unit cell affects the total energy is that it can change the distribution of electrons in the molecule.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calc</span> <span class="o">=</span> <span class="n">GPAW</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">PW</span><span class="p">(</span><span class="mi">550</span><span class="p">),</span>       <span class="c1"># planewave cutoff  350</span>
+            <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;PBE&#39;</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">([</span><span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+            <span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])],)</span>
+
+<span class="c1">## change cell size</span>
+<span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+<span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">L</span><span class="p">:</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">set_cell</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">],</span> <span class="n">scale_atoms</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+    <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">())</span>
+    <span class="c1">## write restart file</span>
+    <span class="n">calc</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;molecules/simple_CO_L</span><span class="si">{}</span><span class="s1">.gpw&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">energies</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-14.923865034147486, -14.76124106128068, -14.731890867379088, -14.718057285375425, -14.720085450475642]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span> <span class="s1">&#39;bo-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Unit cell length ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Total energy (eV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/840aa274c1058f90e81a784d8bc4eec0f6bc2038da2f7970032c444422fd2d0c.png" src="../../_images/840aa274c1058f90e81a784d8bc4eec0f6bc2038da2f7970032c444422fd2d0c.png" />
+</div>
+</div>
+<p>Here there are evidently attractive interactions between the CO molecules which lower the total energy for <em>small</em> box sizes. We have to decide what an appropriate volume for our calculation is, and the choice depends on the goal. We may wish to know the total energy of a molecule that is not interacting with any other molecules, e.g. in the ideal gas limit. In that case we need a large unit cell so the electron density from the molecule does not go outside the unit cell where it would overlap with neighboring images.</p>
+<p>It pays to check for convergence. The cost of running the calculation goes up steeply with increasing cell size. Doubling a lattice vector here leads to a 20-fold increase in computational time! Note that doubling a lattice vector length increases the volume by a factor of 8 for a cube. The cost goes up because the number of planewaves that fit in the cube grows as the cube gets larger.</p>
+</section>
+<section id="convergence-of-energy-cutoff">
+<h3>Convergence of energy Cutoff<a class="headerlink" href="#convergence-of-energy-cutoff" title="Permalink to this heading">#</a></h3>
+<p>The total energy and forces also depend on the computational parameters, notably <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/tutorialsexercises/structureoptimization/stress/stress.html">energy cutoff</a> ENCUT.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">([</span><span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+            <span class="n">Atom</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])],</span>
+           <span class="n">cell</span><span class="o">=</span><span class="p">(</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">))</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+
+<span class="c1">## Change plane wave cutoff</span>
+<span class="n">ENCUTS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">]</span>
+<span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">ENCUTS</span><span class="p">:</span>
+    <span class="n">calc</span> <span class="o">=</span> <span class="n">GPAW</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">PW</span><span class="p">(</span><span class="n">ecut</span><span class="o">=</span><span class="n">en</span><span class="p">),</span> <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;PBE&#39;</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+    <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ENCUTS</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span> <span class="s1">&#39;bo-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ENCUT (eV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Total energy (eV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ffe5ca931d5b9ad9060da8008c2a1197e1accbc2551d4220f971073add69fadf.png" src="../../_images/ffe5ca931d5b9ad9060da8008c2a1197e1accbc2551d4220f971073add69fadf.png" />
+</div>
+</div>
+<p>Keep in mind that</p>
+<ul class="simple">
+<li><p>we are generally interested in differences in total energy, and the differences tend to converge faster than a single total energy.</p></li>
+<li><p>Also it is important to note that it is usually a single element that determines the rate of convergence.</p></li>
+<li><p>The reason we do not just use very high ENCUT all the time is it is expensive.</p></li>
+</ul>
+</section>
+</section>
+<section id="visualizing-electron-density">
+<h2>Visualizing electron density<a class="headerlink" href="#visualizing-electron-density" title="Permalink to this heading">#</a></h2>
+<p>The electron density is a 3D quantity: for every <span class="math notranslate nohighlight">\((x,y,z)\)</span> point, there is a <em>charge density</em>. That means we need 4 numbers for each point: <span class="math notranslate nohighlight">\((x,y,z)\)</span> and <span class="math notranslate nohighlight">\(\rho(x,y,z)\)</span>. Below we show an example of plotting the charge density, and we consider some issues we have to consider when visualizing volumetric data in unit cells with periodic boundary conditions. We will use the results from a previous calculation.</p>
+<p><a class="reference external" href="https://www.brown.edu/Departments/Engineering/Labs/Peterson/tips/ElectronDensity/index.html">Visualizing electron density compute by GPAW</a></p>
+<ul class="simple">
+<li><p>First, the all-electron density distribution around a molecule is calculated in GPAW.</p></li>
+<li><p>All electron density data as well as grid points on which the density is represented are saved to files.</p></li>
+<li><p>Then use 3D plot to visualize data.</p></li>
+</ul>
+<p><strong>Pakages</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mayavi</span>  <span class="c1"># mayavi from conda-forge may cause error</span>
+</pre></div>
+</div>
+<p>to solve error <code class="docutils literal notranslate"><span class="pre">libGL.so.1</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> 
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libgl1</span>
+</pre></div>
+</div>
+<p>NOTE:</p>
+<ul class="simple">
+<li><p>restart a calculation <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/documentation/restart_files.html">in GPAW</a></p></li>
+<li><p>GPAW <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/documentation/basic.html#parameters">parameters</a></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">GPAW</span><span class="p">,</span> <span class="n">restart</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">write</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">## compute all-electron density</span>
+<span class="n">atoms</span><span class="p">,</span> <span class="n">calc</span> <span class="o">=</span> <span class="n">restart</span><span class="p">(</span><span class="s1">&#39;molecules/simple_CO.gpw&#39;</span><span class="p">)</span>  <span class="c1"># read file from previous calc</span>
+<span class="n">density</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">get_all_electron_density</span><span class="p">(</span><span class="n">gridrefinement</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">write</span><span class="p">(</span><span class="s1">&#39;molecules/density_co.cube&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">density</span><span class="p">)</span>
+
+<span class="n">grid</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">gd</span><span class="o">.</span><span class="n">get_grid_point_coordinates</span><span class="p">()</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;molecules/grid_co.npy&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.io.cube</span> <span class="kn">import</span> <span class="n">read_cube_data</span>
+<span class="kn">from</span> <span class="nn">ase.visualize</span> <span class="kn">import</span> <span class="n">mlab</span>
+
+<span class="c1"># Read the electron density data from the GPAW cube file</span>
+<span class="n">density</span><span class="p">,</span> <span class="n">atoms</span> <span class="o">=</span> <span class="n">read_cube_data</span><span class="p">(</span><span class="s1">&#39;molecules/density_co.cube&#39;</span><span class="p">)</span>
+
+<span class="n">mlab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">28</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Read the electron density data from the GPAW cube file</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">density</span><span class="p">,</span> <span class="n">atoms</span> <span class="o">=</span> <span class="n">read_cube_data</span><span class="p">(</span><span class="s1">&#39;molecules/density_co.cube&#39;</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">mlab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">density</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: plot() missing 1 required positional argument: &#39;contours&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+<span class="kn">from</span> <span class="nn">ase.io.cube</span> <span class="kn">import</span> <span class="n">read_cube_data</span>
+<span class="kn">from</span> <span class="nn">ase.data</span> <span class="kn">import</span> <span class="n">vdw_radii</span>
+
+
+<span class="c1"># Read the electron density data from the GPAW cube file</span>
+<span class="n">density</span><span class="p">,</span> <span class="n">atoms</span> <span class="o">=</span> <span class="n">read_cube_data</span><span class="p">(</span><span class="s1">&#39;molecules/density_co.cube&#39;</span><span class="p">)</span>
+
+<span class="c1"># make a white figure</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">650</span><span class="p">,</span> <span class="mi">650</span><span class="p">))</span>
+
+<span class="c1"># Create the Mayavi volume object</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">scalar_field</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+<span class="c1"># Adjust the color map and isosurface level</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">scalar_field</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+<span class="nb">min</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="nb">max</span> <span class="o">=</span> <span class="n">density</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">vol</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">volume</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="nb">min</span> <span class="o">+</span> <span class="mf">0.65</span> <span class="o">*</span> <span class="p">(</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">),</span>
+                                   <span class="n">vmax</span><span class="o">=</span><span class="nb">min</span> <span class="o">+</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="p">(</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">))</span>
+
+<span class="c1"># # Add axes and labels</span>
+<span class="c1"># mlab.axes()</span>
+<span class="c1"># mlab.xlabel(&#39;X&#39;)</span>
+<span class="c1"># mlab.ylabel(&#39;Y&#39;)</span>
+<span class="c1"># mlab.zlabel(&#39;Z&#39;)</span>
+
+<span class="c1"># # make a white figure</span>
+<span class="c1"># mlab.figure(1, bgcolor=(1, 1, 1), size=(350, 350))</span>
+
+<span class="c1"># # plot the atoms as spheres</span>
+<span class="c1"># for atom in atoms:</span>
+<span class="c1">#     mlab.points3d(atom.x, atom.y, atom.z,</span>
+<span class="c1">#                   scale_factor=vdw_radii[atom.number] / 5.,  #this determines the size of the atom</span>
+<span class="c1">#                   resolution=20,</span>
+<span class="c1">#                   scale_mode=&#39;none&#39;)</span>
+
+<span class="c1"># Show the plot</span>
+<span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-density-of-states-dos">
+<h2>The density of states (DOS)<a class="headerlink" href="#the-density-of-states-dos" title="Permalink to this heading">#</a></h2>
+<p>The density of states (DOS) gives you the number of electronic states (i.e., the orbitals) that have a particular energy. A brief introduction in <a class="reference external" href="https://wiki.fysik.dtu.dk/gpaw/tutorialsexercises/electronic/pdos/pdos.html">GPAW page</a></p>
+<p>A GPAW calculator gives access to four different kinds of projected density of states:</p>
+<ul class="simple">
+<li><p>Total density of states.</p></li>
+<li><p>Molecular orbital projected density of states.</p></li>
+<li><p>Atomic orbital projected density of states.</p></li>
+<li><p>Wigner-Seitz local density of states.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gpaw</span> <span class="kn">import</span> <span class="n">GPAW</span><span class="p">,</span> <span class="n">restart</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">atoms</span><span class="p">,</span> <span class="n">calc</span> <span class="o">=</span> <span class="n">restart</span><span class="p">(</span><span class="s1">&#39;molecules/simple_co.gpw&#39;</span><span class="p">)</span>    <span class="c1"># we already ran this!</span>
+<span class="n">e</span><span class="p">,</span> <span class="n">dos</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">get_dos</span><span class="p">(</span><span class="n">spin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">2001</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">e_f</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">get_fermi_level</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span> <span class="o">-</span> <span class="n">e_f</span><span class="p">,</span> <span class="n">dos</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Energy - $E_f$ (eV)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;DOS&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/cf43e36010593136e05ef89a1667e4f9d3475f7df69f39e058205f668f5a6265.png" src="../../_images/cf43e36010593136e05ef89a1667e4f9d3475f7df69f39e058205f668f5a6265.png" />
+</div>
+</div>
+</section>
+<section id="electrostatic-potential">
+<h2>Electrostatic potential<a class="headerlink" href="#electrostatic-potential" title="Permalink to this heading">#</a></h2>
+<p>This is an example of the so-called <span class="math notranslate nohighlight">\(\sigma\)</span> hole in a halogen bond. The coordinates for the <span class="math notranslate nohighlight">\(CF_3Br\)</span> molecule were found at <a class="reference external" href="http://cccbdb.nist.gov/exp2.asp?casno=75638">this link</a>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook/3_modeling"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2_2_mol_simple_properties.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Simple properties with ASE</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2_4_mol_geo_optimization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Geometry optimization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-and-forces">Energy and forces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-with-size-of-unit-cell">Convergence with size of unit cell</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-of-energy-cutoff">Convergence of energy Cutoff</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-electron-density">Visualizing electron density</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-density-of-states-dos">The density of states (DOS)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#electrostatic-potential">Electrostatic potential</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By thangckt
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
