@@ -27,6 +27,7 @@ gpaw test
     ```sh
     gpaw install-data --register ~/PAWDATA
     ```
+- in Linux, need `export GPAW_SETUP_PATH=/path_to_dataset_folder`
 - Avoid install from source using `pip`, since it can not link with `scalapack fftw libvdwxc elpa` from conda-forge
     ```sh
     pip install --upgrade git+https://gitlab.com/ase/ase.git@master
